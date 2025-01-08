@@ -7,25 +7,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace librarymenagment.Controllers
 {
-    public class CategoriesController : Controller
+    public class AuthorsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public AuthorsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Authors
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            return View(await _context.Author.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Authors/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +36,41 @@ namespace librarymenagment.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var author = await _context.Author
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (author == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(author);
         }
 
-        // GET: Categories/Create
+        // GET: Authors/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Authors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,createdAt,updatedAt")] Category category)
+        public async Task<IActionResult> Create([Bind("id,name,last_name,createdAt,updatedAt")] Author author)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(author);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(author);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Authors/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +78,22 @@ namespace librarymenagment.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
+            var author = await _context.Author.FindAsync(id);
+            if (author == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(author);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Authors/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,createdAt,updatedAt")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,last_name,createdAt,updatedAt")] Author author)
         {
-            if (id != category.id)
+            if (id != author.id)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace librarymenagment.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(author);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!AuthorExists(author.id))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace librarymenagment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(author);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Authors/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +130,34 @@ namespace librarymenagment.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var author = await _context.Author
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (author == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(author);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Authors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Category.FindAsync(id);
-            if (category != null)
+            var author = await _context.Author.FindAsync(id);
+            if (author != null)
             {
-                _context.Category.Remove(category);
+                _context.Author.Remove(author);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool AuthorExists(int id)
         {
-            return _context.Category.Any(e => e.id == id);
+            return _context.Author.Any(e => e.id == id);
         }
     }
 }
