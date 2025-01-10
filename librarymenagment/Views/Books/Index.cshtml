@@ -55,7 +55,7 @@
             <label class="form-label">Author:</label>
             <select name="authorId" class="form-select">
                 <option value="" selected="@(ViewData["CurrentAuthorFilter"] == null)">All Authors</option>
-                @foreach (var author in (IEnumerable<librarymenagment.Models.Author>)ViewBag.Authors)
+                @foreach (var author in (IEnumerable<librarymenagment.Models.Author>)ViewBag.Author)
                 {
                     <option value="@author.id" selected="@(author.id.ToString() == ViewData["CurrentAuthorFilter"]?.ToString())">
                         @author.name @author.last_name
@@ -67,7 +67,7 @@
             <label class="form-label">Category:</label>
             <select name="categoryId" class="form-select">
                 <option value="" selected="@(ViewData["CurrentCategoryFilter"] == null)">All Categories</option>
-                @foreach (var category in (IEnumerable<librarymenagment.Models.Category>)ViewBag.Categories)
+                @foreach (var category in (IEnumerable<librarymenagment.Models.Category>)ViewBag.Category)
                 {
                     <option value="@category.id" selected="@(category.id.ToString() == ViewData["CurrentCategoryFilter"]?.ToString())">
                         @category.name

@@ -32,7 +32,7 @@ namespace librarymenagment.Controllers
             ViewData["CurrentAuthorFilter"] = authorId;
             ViewData["CurrentCategoryFilter"] = categoryId;
 
-            var books = from b in _context.Books
+            var books = from b in _context.Book
                         .Include(b => b.Author)
                         .Include(b => b.Category)
                         select b;
@@ -65,6 +65,10 @@ namespace librarymenagment.Controllers
                 "category_desc" => books.OrderByDescending(b => b.Category.name),
                 _ => books.OrderBy(b => b.Title),
             };
+            var authors = _context.Author.ToList();
+            ViewBag.Author = authors;
+            var categories = _context.Category.ToList();
+            ViewBag.Category = categories;
 
             return View(await books.ToListAsync());
         }   
