@@ -29,13 +29,17 @@
                 <span asp-validation-for="Copies" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
+                <label asp-for="AuthorId" class="control-label">Author</label>
+                <select asp-for="AuthorId" class="form-control" asp-items="@(ViewData["AuthorId"] as SelectList)">
+                    <option value="">-- Select an Author --</option>
+                </select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="@(ViewData["CategoryId"] as SelectList)">
+                    <option value="">-- Select a Category --</option>
+                </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
