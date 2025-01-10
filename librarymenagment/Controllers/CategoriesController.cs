@@ -20,9 +20,20 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
-            return View(await _context.Category.ToListAsync());
+            ViewData["CurrentSearch"] = search;
+
+            var categories = from a in _context.Category
+                          select a;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                categories = categories.Where(a =>
+                    a.name.Contains(search)
+                );
+            }
+            return View(await categories.ToListAsync());
         }
 
         // GET: Categories/Details/5
