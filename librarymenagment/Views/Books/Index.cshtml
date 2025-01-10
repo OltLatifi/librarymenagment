@@ -9,6 +9,45 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- Add Filter Form -->
+<form asp-action="Index" method="get">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label class="form-label">Title:</label>
+            <input type="text" name="searchTitle" class="form-control" value="@ViewData["CurrentTitleFilter"]" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Author:</label>
+            <select name="authorId" class="form-select">
+                <option value="">All Authors</option>
+                @foreach (var author in ViewBag.Authors)
+                {
+                    <option value="@author.Id" @(ViewData["CurrentAuthorFilter"].ToString() == author.Id.ToString() ? "selected" : "")>
+                        @author.name @author.last_name
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Category:</label>
+            <select name="categoryId" class="form-select">
+                <option value="">All Categories</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Id" @(ViewData["CurrentCategoryFilter"].ToString() == category.Id.ToString() ? "selected" : "")>
+                        @category.name
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear Filters</a>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>

@@ -20,10 +20,40 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchTitle, int? authorId, int? categoryId)
         {
-            var applicationDbContext = _context.Book.Include(b => b.Author).Include(b => b.Category);
-            return View(await applicationDbContext.ToListAsync());
+            // Store current filter values for the view
+            ViewData["CurrentTitleFilter"] = searchTitle;
+            ViewData["CurrentAuthorFilter"] = authorId;
+            ViewData["CurrentCategoryFilter"] = categoryId;
+
+            // Get authors and categories for dropdowns
+            ViewBag.Authors = await _context.Authors.ToListAsync();
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+
+            // Start with all books
+            var books = _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrEmpty(searchTitle))
+            {
+                books = books.Where(b => b.Title.Contains(searchTitle));
+            }
+
+            if (authorId.HasValue)
+            {
+                books = books.Where(b => b.AuthorId == authorId);
+            }
+
+            if (categoryId.HasValue)
+            {
+                books = books.Where(b => b.CategoryId == categoryId);
+            }
+
+            return View(await books.ToListAsync());
         }
 
         // GET: Books/Details/5
@@ -51,9 +81,13 @@ namespace librarymenagment.Controllers
         {
             ViewData["AuthorId"] = new SelectList(_context.Author, "id", "name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "id", "name");
+
             return View();
         }
 
+        // POST: Books/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Copies,AuthorId,CategoryId")] Book book)
@@ -64,11 +98,18 @@ namespace librarymenagment.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            foreach (var modelState in ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    Console.WriteLine($"Error: {error.ErrorMessage}");
+                }
+            }
             ViewData["AuthorId"] = new SelectList(_context.Author, "id", "name", book.AuthorId);
             ViewData["CategoryId"] = new SelectList(_context.Category, "id", "name", book.CategoryId);
             return View(book);
         }
-
 
         // GET: Books/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -83,8 +124,8 @@ namespace librarymenagment.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "name", book.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "name", book.CategoryId);
+            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "id", book.AuthorId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "id", book.CategoryId);
             return View(book);
         }
 
@@ -120,8 +161,8 @@ namespace librarymenagment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "name", book.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "name", book.CategoryId);
+            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "id", book.AuthorId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "id", book.CategoryId);
             return View(book);
         }
 
