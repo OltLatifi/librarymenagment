@@ -4,6 +4,40 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+    .sort-header {
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+        color: #212529;
+    }
+
+    .sort-header:hover {
+        color: #0056b3;
+    }
+
+    .sort-indicator::after {
+        content: '↕';
+        position: relative;
+        left: 5px;
+        color: #999;
+    }
+
+    .sort-asc::after {
+        content: '↑';
+        position: relative;
+        left: 5px;
+        color: #000;
+    }
+
+    .sort-desc::after {
+        content: '↓';
+        position: relative;
+        left: 5px;
+        color: #000;
+    }
+</style>
+
 <h1>Index</h1>
 
 <p>
@@ -52,19 +86,54 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.First().Title)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "title_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["TitleSortParam"]"
+                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                    @Html.DisplayNameFor(model => model.First().Title)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Description)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "description" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "description_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["DescriptionSortParam"]"
+                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                    @Html.DisplayNameFor(model => model.First().Description)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Copies)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "copies" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "copies_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["CopiesSortParam"]"
+                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                    @Html.DisplayNameFor(model => model.First().Copies)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Author)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "author" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "author_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["AuthorSortParam"]"
+                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                    @Html.DisplayNameFor(model => model.First().Author)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Category)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "category" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "category_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["CategorySortParam"]"
+                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                    @Html.DisplayNameFor(model => model.First().Category)
+                </a>
             </th>
             <th></th>
         </tr>

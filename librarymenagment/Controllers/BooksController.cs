@@ -20,37 +20,54 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(string searchTitle, int? authorId, int? categoryId)
+        public async Task<IActionResult> Index(string sortOrder, string searchTitle, string authorId, string categoryId)
         {
+            ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["DescriptionSortParam"] = sortOrder == "description" ? "description_desc" : "description";
+            ViewData["CopiesSortParam"] = sortOrder == "copies" ? "copies_desc" : "copies";
+            ViewData["AuthorSortParam"] = sortOrder == "author" ? "author_desc" : "author";
+            ViewData["CategorySortParam"] = sortOrder == "category" ? "category_desc" : "category";
+
             ViewData["CurrentTitleFilter"] = searchTitle;
-            ViewData["CurrentAuthorFilter"] = authorId?.ToString();
-            ViewData["CurrentCategoryFilter"] = categoryId?.ToString();
+            ViewData["CurrentAuthorFilter"] = authorId;
+            ViewData["CurrentCategoryFilter"] = categoryId;
 
-            ViewBag.Authors = await _context.Author.ToListAsync();
-            ViewBag.Categories = await _context.Category.ToListAsync();
+            var books = from b in _context.Books
+                        .Include(b => b.Author)
+                        .Include(b => b.Category)
+                        select b;
 
-            var books = _context.Book
-                .Include(b => b.Author)
-                .Include(b => b.Category)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTitle))
+            if (!String.IsNullOrEmpty(searchTitle))
             {
                 books = books.Where(b => b.Title.Contains(searchTitle));
             }
-
-            if (authorId.HasValue)
+            if (!String.IsNullOrEmpty(authorId))
             {
-                books = books.Where(b => b.AuthorId == authorId);
+                int authorIdInt = int.Parse(authorId);
+                books = books.Where(b => b.AuthorId == authorIdInt);
+            }
+            if (!String.IsNullOrEmpty(categoryId))
+            {
+                int categoryIdInt = int.Parse(categoryId);
+                books = books.Where(b => b.CategoryId == categoryIdInt);
             }
 
-            if (categoryId.HasValue)
+            books = sortOrder switch
             {
-                books = books.Where(b => b.CategoryId == categoryId);
-            }
+                "title_desc" => books.OrderByDescending(b => b.Title),
+                "description" => books.OrderBy(b => b.Description),
+                "description_desc" => books.OrderByDescending(b => b.Description),
+                "copies" => books.OrderBy(b => b.Copies),
+                "copies_desc" => books.OrderByDescending(b => b.Copies),
+                "author" => books.OrderBy(b => b.Author.name),
+                "author_desc" => books.OrderByDescending(b => b.Author.name),
+                "category" => books.OrderBy(b => b.Category.name),
+                "category_desc" => books.OrderByDescending(b => b.Category.name),
+                _ => books.OrderBy(b => b.Title),
+            };
 
             return View(await books.ToListAsync());
-        }
+        }   
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
