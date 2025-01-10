@@ -22,10 +22,22 @@ namespace librarymenagment.Controllers
 
         // GET: Authors
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
-            return View(await _context.Author.ToListAsync());
+            ViewData["CurrentSearch"] = search;
+
+            var authors = from a in _context.Author
+                          select a;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                authors = authors.Where(a => (a.name + " " + a.last_name).Contains(search));
+            }
+
+            return View(await authors.ToListAsync());
         }
+
+
 
         // GET: Authors/Details/5
         [Authorize(Roles = "Admin")]
