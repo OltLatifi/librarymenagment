@@ -20,7 +20,7 @@
         <div class="col-md-3">
             <label class="form-label">Author:</label>
             <select name="authorId" class="form-select">
-                <option value="" selected="@(string.IsNullOrEmpty(ViewData["CurrentAuthorFilter"]?.ToString()))">All Authors</option>
+                <option value="" selected="@(ViewData["CurrentAuthorFilter"] == null)">All Authors</option>
                 @foreach (var author in (IEnumerable<librarymenagment.Models.Author>)ViewBag.Authors)
                 {
                     <option value="@author.id" selected="@(author.id.ToString() == ViewData["CurrentAuthorFilter"]?.ToString())">
@@ -32,10 +32,10 @@
         <div class="col-md-3">
             <label class="form-label">Category:</label>
             <select name="categoryId" class="form-select">
-                <option value="" selected="@(string.IsNullOrEmpty(ViewData["CurrentCategoryFilter"]?.ToString()))">All Categories</option>
+                <option value="" selected="@(ViewData["CurrentCategoryFilter"] == null)">All Categories</option>
                 @foreach (var category in (IEnumerable<librarymenagment.Models.Category>)ViewBag.Categories)
                 {
-                    <option value="@category.id" selected="@(string.IsNullOrEmpty(ViewData["CurrentCategoryFilter"]?.ToString()))">
+                    <option value="@category.id" selected="@(category.id.ToString() == ViewData["CurrentCategoryFilter"]?.ToString())">
                         @category.name
                     </option>
                 }

@@ -23,8 +23,8 @@ namespace librarymenagment.Controllers
         public async Task<IActionResult> Index(string searchTitle, int? authorId, int? categoryId)
         {
             ViewData["CurrentTitleFilter"] = searchTitle;
-            ViewData["CurrentAuthorFilter"] = authorId;
-            ViewData["CurrentCategoryFilter"] = categoryId;
+            ViewData["CurrentAuthorFilter"] = authorId?.ToString();
+            ViewData["CurrentCategoryFilter"] = categoryId?.ToString();
 
             ViewBag.Authors = await _context.Author.ToListAsync();
             ViewBag.Categories = await _context.Category.ToListAsync();
