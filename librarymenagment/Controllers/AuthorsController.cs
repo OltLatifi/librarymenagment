@@ -31,7 +31,11 @@ namespace librarymenagment.Controllers
 
             if (!String.IsNullOrEmpty(search))
             {
-                authors = authors.Where(a => (a.name + " " + a.last_name).Contains(search));
+                authors = authors.Where(a => 
+                    a.name.Contains(search) || 
+                    a.last_name.Contains(search) ||
+                    (a.name + " " + a.last_name).Contains(search)
+                );
             }
 
             return View(await authors.ToListAsync());
