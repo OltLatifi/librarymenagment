@@ -22,22 +22,18 @@ namespace librarymenagment.Controllers
         // GET: Books
         public async Task<IActionResult> Index(string searchTitle, int? authorId, int? categoryId)
         {
-            // Store current filter values for the view
             ViewData["CurrentTitleFilter"] = searchTitle;
             ViewData["CurrentAuthorFilter"] = authorId;
             ViewData["CurrentCategoryFilter"] = categoryId;
 
-            // Get authors and categories for dropdowns
-            ViewBag.Authors = await _context.Authors.ToListAsync();
-            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Authors = await _context.Author.ToListAsync();
+            ViewBag.Categories = await _context.Category.ToListAsync();
 
-            // Start with all books
-            var books = _context.Books
+            var books = _context.Book
                 .Include(b => b.Author)
                 .Include(b => b.Category)
                 .AsQueryable();
 
-            // Apply filters
             if (!string.IsNullOrEmpty(searchTitle))
             {
                 books = books.Where(b => b.Title.Contains(searchTitle));
