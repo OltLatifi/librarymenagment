@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
 using Microsoft.AspNetCore.Authorization;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -55,8 +56,7 @@ namespace librarymenagment.Controllers
                 _ => authors.OrderBy(a => a.name),
             };
 
-            int pageSize = 10;
-            return View(await PaginatedList<Author>.CreateAsync(authors, pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Author>.CreateAsync(authors, pageNumber ?? 1));
         }
 
 
