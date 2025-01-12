@@ -20,12 +20,16 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search, string sortOrder)
         {
             ViewData["CurrentSearch"] = search;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
+            ViewData["UpdatedAtSortParam"] = sortOrder == "updatedAt" ? "updatedAt_desc" : "updatedAt";
 
             var categories = from a in _context.Category
-                          select a;
+                    select a;
 
             if (!String.IsNullOrEmpty(search))
             {
@@ -33,6 +37,17 @@ namespace librarymenagment.Controllers
                     a.name.Contains(search)
                 );
             }
+
+            categories = sortOrder switch
+            {
+                "name_desc" => categories.OrderByDescending(c => c.name),
+                "createdAt" => categories.OrderBy(c => c.createdAt),
+                "createdAt_desc" => categories.OrderByDescending(c => c.createdAt),
+                "updatedAt" => categories.OrderBy(c => c.updatedAt),
+                "updatedAt_desc" => categories.OrderByDescending(c => c.updatedAt),
+                _ => categories.OrderBy(c => c.name),
+            };
+
             return View(await categories.ToListAsync());
         }
 

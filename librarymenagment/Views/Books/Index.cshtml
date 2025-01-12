@@ -86,7 +86,10 @@
     <thead>
         <tr>
             <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "title_desc" ? "sort-desc" : "sort-indicator")"
+                <a class="sort-header @(ViewData["CurrentSort"] == null ? "sort-asc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "title_desc" ? "sort-desc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "title" ? "sort-asc" : 
+                                   "sort-indicator")"
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["TitleSortParam"]"
                    asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
@@ -96,7 +99,9 @@
                 </a>
             </th>
             <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "description" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "description_desc" ? "sort-desc" : "sort-indicator")"
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "description" ? "sort-asc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "description_desc" ? "sort-desc" : 
+                                   "sort-indicator")"
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["DescriptionSortParam"]"
                    asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
@@ -106,7 +111,9 @@
                 </a>
             </th>
             <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "copies" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "copies_desc" ? "sort-desc" : "sort-indicator")"
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "copies" ? "sort-asc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "copies_desc" ? "sort-desc" : 
+                                   "sort-indicator")"
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["CopiesSortParam"]"
                    asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
@@ -116,7 +123,9 @@
                 </a>
             </th>
             <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "author" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "author_desc" ? "sort-desc" : "sort-indicator")"
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "author" ? "sort-asc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "author_desc" ? "sort-desc" : 
+                                   "sort-indicator")"
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["AuthorSortParam"]"
                    asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
@@ -126,7 +135,9 @@
                 </a>
             </th>
             <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "category" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "category_desc" ? "sort-desc" : "sort-indicator")"
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "category" ? "sort-asc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "category_desc" ? "sort-desc" : 
+                                   "sort-indicator")"
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["CategorySortParam"]"
                    asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
