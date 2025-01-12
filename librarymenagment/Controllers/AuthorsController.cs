@@ -22,9 +22,12 @@ namespace librarymenagment.Controllers
 
         // GET: Authors
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search, string sortOrder)
         {
             ViewData["CurrentSearch"] = search;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["LastNameSortParam"] = sortOrder == "lastname" ? "lastname_desc" : "lastname";
 
             var authors = from a in _context.Author
                           select a;
@@ -37,6 +40,14 @@ namespace librarymenagment.Controllers
                     (a.name + " " + a.last_name).Contains(search)
                 );
             }
+
+            authors = sortOrder switch
+            {
+                "name_desc" => authors.OrderByDescending(a => a.name),
+                "lastname" => authors.OrderBy(a => a.last_name),
+                "lastname_desc" => authors.OrderByDescending(a => a.last_name),
+                _ => authors.OrderBy(a => a.name),
+            };
 
             return View(await authors.ToListAsync());
         }

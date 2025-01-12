@@ -63,14 +63,16 @@
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "name_desc" ? "sort-desc" : "sort-indicator")"
                    asp-action="Index" 
-                   asp-route-sortOrder="@ViewData["NameSortParam"]">
+                   asp-route-sortOrder="@ViewData["NameSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().name)
                 </a>
             </th>
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "lastname" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "lastname_desc" ? "sort-desc" : "sort-indicator")"
                    asp-action="Index" 
-                   asp-route-sortOrder="@ViewData["LastNameSortParam"]">
+                   asp-route-sortOrder="@ViewData["LastNameSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().last_name)
                 </a>
             </th>
