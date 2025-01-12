@@ -20,13 +20,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Books</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"].ToString() == "Books" ? "active" : "")" 
+                               asp-area="" 
+                               asp-controller="Books" 
+                               asp-action="Index">Books</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="Index">Authors</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"].ToString() == "Authors" ? "active" : "")" 
+                               asp-area="" 
+                               asp-controller="Authors" 
+                               asp-action="Index">Authors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"].ToString() == "Categories" ? "active" : "")" 
+                               asp-area="" 
+                               asp-controller="Categories" 
+                               asp-action="Index">Categories</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
