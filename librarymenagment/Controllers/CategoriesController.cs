@@ -37,20 +37,20 @@ namespace librarymenagment.Controllers
             if (!String.IsNullOrEmpty(search))
             {
                 categories = categories.Where(a =>
-                    a.name.Contains(search)
+                    a.Name.Contains(search)
                 );
             }
 
             categories = sortOrder switch
             {
-                "name_desc" => categories.OrderByDescending(c => c.name),
-                "createdAt" => categories.OrderBy(c => c.createdAt),
-                "createdAt_desc" => categories.OrderByDescending(c => c.createdAt),
-                "updatedAt" => categories.OrderBy(c => c.updatedAt),
-                "updatedAt_desc" => categories.OrderByDescending(c => c.updatedAt),
+                "name_desc" => categories.OrderByDescending(c => c.Name),
+                "createdAt" => categories.OrderBy(c => c.CreatedAt),
+                "createdAt_desc" => categories.OrderByDescending(c => c.CreatedAt),
+                "updatedAt" => categories.OrderBy(c => c.UpdatedAt),
+                "updatedAt_desc" => categories.OrderByDescending(c => c.UpdatedAt),
                 "active" => categories.OrderBy(c => c.Active),
                 "active_desc" => categories.OrderByDescending(c => c.Active),
-                _ => categories.OrderBy(c => c.name),
+                _ => categories.OrderBy(c => c.Name),
             };
 
             return View(await PaginatedList<Category>.CreateAsync(categories, pageNumber ?? 1));
@@ -65,7 +65,7 @@ namespace librarymenagment.Controllers
             }
 
             var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -85,7 +85,7 @@ namespace librarymenagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,createdAt,updatedAt")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -118,9 +118,9 @@ namespace librarymenagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,createdAt,updatedAt")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
-            if (id != category.id)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -134,7 +134,7 @@ namespace librarymenagment.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -157,7 +157,7 @@ namespace librarymenagment.Controllers
             }
 
             var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -183,7 +183,7 @@ namespace librarymenagment.Controllers
 
         private bool CategoryExists(int id)
         {
-            return _context.Category.Any(e => e.id == id);
+            return _context.Category.Any(e => e.Id == id);
         }
     }
 }

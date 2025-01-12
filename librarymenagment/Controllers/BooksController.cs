@@ -63,10 +63,10 @@ namespace librarymenagment.Controllers
                 "description_desc" => books.OrderByDescending(b => b.Description),
                 "copies" => books.OrderBy(b => b.Copies),
                 "copies_desc" => books.OrderByDescending(b => b.Copies),
-                "author" => books.OrderBy(b => b.Author.name),
-                "author_desc" => books.OrderByDescending(b => b.Author.name),
-                "category" => books.OrderBy(b => b.Category.name),
-                "category_desc" => books.OrderByDescending(b => b.Category.name),
+                "author" => books.OrderBy(b => b.Author.Name),
+                "author_desc" => books.OrderByDescending(b => b.Author.Name),
+                "category" => books.OrderBy(b => b.Category.Name),
+                "category_desc" => books.OrderByDescending(b => b.Category.Name),
                 "active" => books.OrderBy(b => b.Active),
                 "active_desc" => books.OrderByDescending(b => b.Active),
                 _ => books.OrderBy(b => b.Title),
@@ -100,10 +100,13 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Books/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "name");
-            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "name");
+            var authors = await _context.Author.Where(a => a.Active).ToListAsync();
+            var categories = await _context.Category.Where(c => c.Active).ToListAsync();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
 
             return View();
         }
@@ -123,15 +126,12 @@ namespace librarymenagment.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            foreach (var modelState in ModelState.Values)
-            {
-                foreach (var error in modelState.Errors)
-                {
-                    Console.WriteLine($"Error: {error.ErrorMessage}");
-                }
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "name", book.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "name", book.CategoryId);
+            var authors = await _context.Author.Where(a => a.Active).ToListAsync();
+            var categories = await _context.Category.Where(c => c.Active).ToListAsync();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "Name", book.AuthorId);
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", book.CategoryId);
+
             return View(book);
         }
 
@@ -148,8 +148,11 @@ namespace librarymenagment.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "id", book.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "id", book.CategoryId);
+            var authors = await _context.Author.Where(a => a.Active).ToListAsync();
+            var categories = await _context.Category.Where(c => c.Active).ToListAsync();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "Name", book.AuthorId);
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", book.CategoryId);
             return View(book);
         }
 
@@ -185,8 +188,11 @@ namespace librarymenagment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Author, "id", "id", book.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "id", "id", book.CategoryId);
+            var authors = await _context.Author.Where(a => a.Active).ToListAsync();
+            var categories = await _context.Category.Where(c => c.Active).ToListAsync();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "Name", book.AuthorId);
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", book.CategoryId);
             return View(book);
         }
 

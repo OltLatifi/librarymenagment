@@ -63,7 +63,7 @@
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["NameSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
-                    @Html.DisplayNameFor(model => model.First().name)
+                    @Html.DisplayNameFor(model => model.First().Name)
                 </a>
             </th>
             <th>
@@ -97,7 +97,7 @@
     @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -109,9 +109,9 @@
                 @Html.DisplayFor(modelItem => item.Active)
             </td>
             <td>
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
     }

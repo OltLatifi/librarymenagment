@@ -60,8 +60,8 @@
                 <option value="" selected="@(ViewData["CurrentAuthorFilter"] == null)">All Authors</option>
                 @foreach (var author in (IEnumerable<librarymenagment.Models.Author>)ViewBag.Author)
                 {
-                    <option value="@author.id" selected="@(author.id.ToString() == ViewData["CurrentAuthorFilter"]?.ToString())">
-                        @author.name @author.last_name
+                    <option value="@author.Id" selected="@(author.Id.ToString() == ViewData["CurrentAuthorFilter"]?.ToString())">
+                        @author.Name @author.LastName
                     </option>
                 }
             </select>
@@ -72,8 +72,8 @@
                 <option value="" selected="@(ViewData["CurrentCategoryFilter"] == null)">All Categories</option>
                 @foreach (var category in (IEnumerable<librarymenagment.Models.Category>)ViewBag.Category)
                 {
-                    <option value="@category.id" selected="@(category.id.ToString() == ViewData["CurrentCategoryFilter"]?.ToString())">
-                        @category.name
+                    <option value="@category.Id" selected="@(category.Id.ToString() == ViewData["CurrentCategoryFilter"]?.ToString())">
+                        @category.Name
                     </option>
                 }
             </select>
@@ -178,10 +178,10 @@
                     @Html.DisplayFor(modelItem => item.Copies)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Author.name) @Html.DisplayFor(modelItem => item.Author.last_name)
+                    @Html.DisplayFor(modelItem => item.Author.Name) @Html.DisplayFor(modelItem => item.Author.LastName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.name)
+                    @Html.DisplayFor(modelItem => item.Category.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Active)

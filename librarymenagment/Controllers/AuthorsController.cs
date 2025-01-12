@@ -40,24 +40,24 @@ namespace librarymenagment.Controllers
             if (!String.IsNullOrEmpty(search))
             {
                 authors = authors.Where(a => 
-                    a.name.Contains(search) || 
-                    a.last_name.Contains(search) ||
-                    (a.name + " " + a.last_name).Contains(search)
+                    a.Name.Contains(search) || 
+                    a.LastName.Contains(search) ||
+                    (a.Name + " " + a.LastName).Contains(search)
                 );
             }
 
             authors = sortOrder switch
             {
-                "name_desc" => authors.OrderByDescending(a => a.name),
-                "lastname" => authors.OrderBy(a => a.last_name),
-                "lastname_desc" => authors.OrderByDescending(a => a.last_name),
-                "createdAt" => authors.OrderBy(a => a.createdAt),
-                "createdAt_desc" => authors.OrderByDescending(a => a.createdAt),
-                "updatedAt" => authors.OrderBy(a => a.updatedAt),
-                "updatedAt_desc" => authors.OrderByDescending(a => a.updatedAt),
+                "name_desc" => authors.OrderByDescending(a => a.Name),
+                "lastname" => authors.OrderBy(a => a.LastName),
+                "lastname_desc" => authors.OrderByDescending(a => a.LastName),
+                "createdAt" => authors.OrderBy(a => a.CreatedAt),
+                "createdAt_desc" => authors.OrderByDescending(a => a.CreatedAt),
+                "updatedAt" => authors.OrderBy(a => a.UpdatedAt),
+                "updatedAt_desc" => authors.OrderByDescending(a => a.UpdatedAt),
                 "active" => authors.OrderBy(a => a.Active),
                 "active_desc" => authors.OrderByDescending(a => a.Active),
-                _ => authors.OrderBy(a => a.name),
+                _ => authors.OrderBy(a => a.Name),
             };
 
             return View(await PaginatedList<Author>.CreateAsync(authors, pageNumber ?? 1));
@@ -75,7 +75,7 @@ namespace librarymenagment.Controllers
             }
 
             var author = await _context.Author
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (author == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace librarymenagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,last_name,createdAt,updatedAt")] Author author)
+        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Active")] Author author)
         {
             if (ModelState.IsValid)
             {
@@ -130,9 +130,9 @@ namespace librarymenagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,last_name,createdAt,updatedAt")] Author author)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,CreatedAt,UpdatedAt")] Author author)
         {
-            if (id != author.id)
+            if (id != author.Id)
             {
                 return NotFound();
             }
@@ -146,7 +146,7 @@ namespace librarymenagment.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AuthorExists(author.id))
+                    if (!AuthorExists(author.Id))
                     {
                         return NotFound();
                     }
@@ -170,7 +170,7 @@ namespace librarymenagment.Controllers
             }
 
             var author = await _context.Author
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (author == null)
             {
                 return NotFound();
@@ -196,7 +196,7 @@ namespace librarymenagment.Controllers
 
         private bool AuthorExists(int id)
         {
-            return _context.Author.Any(e => e.id == id);
+            return _context.Author.Any(e => e.Id == id);
         }
     }
 }
