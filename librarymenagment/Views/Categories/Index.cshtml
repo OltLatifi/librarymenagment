@@ -71,7 +71,7 @@
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["CreatedAtSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
-                    @Html.DisplayNameFor(model => model.First().createdAt)
+                    @Html.DisplayNameFor(model => model.First().CreatedAt)
                 </a>
             </th>
             <th>
@@ -79,7 +79,15 @@
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["UpdatedAtSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
-                    @Html.DisplayNameFor(model => model.First().updatedAt)
+                    @Html.DisplayNameFor(model => model.First().UpdatedAt)
+                </a>
+            </th>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["ActiveSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
+                    @Html.DisplayNameFor(model => model.First().Active)
                 </a>
             </th>
             <th></th>
@@ -92,15 +100,18 @@
                 @Html.DisplayFor(modelItem => item.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.createdAt)
+                @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.updatedAt)
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
             </td>
         </tr>
     }

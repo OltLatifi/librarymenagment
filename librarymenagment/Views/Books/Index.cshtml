@@ -149,6 +149,18 @@
                     @Html.DisplayNameFor(model => model.First().Category)
                 </a>
             </th>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : 
+                                   ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : 
+                                   "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["ActiveSortParam"]"
+                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                    @Html.DisplayNameFor(model => model.First().Active)
+                </a>
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -172,9 +184,12 @@
                     @Html.DisplayFor(modelItem => item.Category.name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

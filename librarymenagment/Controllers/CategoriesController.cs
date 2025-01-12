@@ -28,8 +28,10 @@ namespace librarymenagment.Controllers
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
             ViewData["UpdatedAtSortParam"] = sortOrder == "updatedAt" ? "updatedAt_desc" : "updatedAt";
+            ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
 
             var categories = from a in _context.Category
+                    where a.Active
                     select a;
 
             if (!String.IsNullOrEmpty(search))
@@ -46,6 +48,8 @@ namespace librarymenagment.Controllers
                 "createdAt_desc" => categories.OrderByDescending(c => c.createdAt),
                 "updatedAt" => categories.OrderBy(c => c.updatedAt),
                 "updatedAt_desc" => categories.OrderByDescending(c => c.updatedAt),
+                "active" => categories.OrderBy(c => c.Active),
+                "active_desc" => categories.OrderByDescending(c => c.Active),
                 _ => categories.OrderBy(c => c.name),
             };
 
@@ -85,6 +89,7 @@ namespace librarymenagment.Controllers
         {
             if (ModelState.IsValid)
             {
+                category.Active = true;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

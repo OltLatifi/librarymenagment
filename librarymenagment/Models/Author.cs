@@ -1,13 +1,10 @@
 ﻿namespace librarymenagment.Models
 {
-    public class Author
+    public class Author : BaseModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string last_name { get; set; }
-        public string? bio {  get; set; }
-        public DateTime createdAt { get; set; }
-        public DateTime? updatedAt { get; set; }
-
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
+        public string? Bio { get; set; }
     }
 }

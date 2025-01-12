@@ -29,6 +29,7 @@ namespace librarymenagment.Controllers
             ViewData["CopiesSortParam"] = sortOrder == "copies" ? "copies_desc" : "copies";
             ViewData["AuthorSortParam"] = sortOrder == "author" ? "author_desc" : "author";
             ViewData["CategorySortParam"] = sortOrder == "category" ? "category_desc" : "category";
+            ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
 
             ViewData["CurrentTitleFilter"] = searchTitle;
             ViewData["CurrentAuthorFilter"] = authorId;
@@ -37,6 +38,7 @@ namespace librarymenagment.Controllers
             var books = from b in _context.Book
                         .Include(b => b.Author)
                         .Include(b => b.Category)
+                        where b.Active
                         select b;
 
             if (!String.IsNullOrEmpty(searchTitle))
@@ -65,6 +67,8 @@ namespace librarymenagment.Controllers
                 "author_desc" => books.OrderByDescending(b => b.Author.name),
                 "category" => books.OrderBy(b => b.Category.name),
                 "category_desc" => books.OrderByDescending(b => b.Category.name),
+                "active" => books.OrderBy(b => b.Active),
+                "active_desc" => books.OrderByDescending(b => b.Active),
                 _ => books.OrderBy(b => b.Title),
             };
             var authors = _context.Author.ToList();
@@ -113,6 +117,7 @@ namespace librarymenagment.Controllers
         {
             if (ModelState.IsValid)
             {
+                book.Active = true;
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

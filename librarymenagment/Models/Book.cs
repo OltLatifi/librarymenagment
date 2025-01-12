@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Book
+public class Book : BaseModel
 {
     public int Id { get; set; }
     public string Title { get; set; }

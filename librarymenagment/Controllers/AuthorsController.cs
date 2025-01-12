@@ -31,9 +31,11 @@ namespace librarymenagment.Controllers
             ViewData["LastNameSortParam"] = sortOrder == "lastname" ? "lastname_desc" : "lastname";
             ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
             ViewData["UpdatedAtSortParam"] = sortOrder == "updatedAt" ? "updatedAt_desc" : "updatedAt";
-
+            ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
+            
             var authors = from a in _context.Author
-                          select a;
+                         where a.Active
+                         select a;
 
             if (!String.IsNullOrEmpty(search))
             {
@@ -53,6 +55,8 @@ namespace librarymenagment.Controllers
                 "createdAt_desc" => authors.OrderByDescending(a => a.createdAt),
                 "updatedAt" => authors.OrderBy(a => a.updatedAt),
                 "updatedAt_desc" => authors.OrderByDescending(a => a.updatedAt),
+                "active" => authors.OrderBy(a => a.Active),
+                "active_desc" => authors.OrderByDescending(a => a.Active),
                 _ => authors.OrderBy(a => a.name),
             };
 
@@ -96,6 +100,7 @@ namespace librarymenagment.Controllers
         {
             if (ModelState.IsValid)
             {
+                author.Active = true;
                 _context.Add(author);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
