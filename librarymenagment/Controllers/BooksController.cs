@@ -116,7 +116,7 @@ namespace librarymenagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Copies,AuthorId,CategoryId")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Copies,AuthorId,CategoryId,Active")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -161,7 +161,7 @@ namespace librarymenagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Copies,AuthorId,CategoryId")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Copies,AuthorId,CategoryId,Active")] Book book)
         {
             if (id != book.Id)
             {
