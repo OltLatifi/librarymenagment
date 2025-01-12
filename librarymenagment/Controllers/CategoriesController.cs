@@ -20,12 +20,17 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search, string sortOrder)
         {
+            Console.WriteLine("Sort Order: " + sortOrder);
             ViewData["CurrentSearch"] = search;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CreatedAtSortParm"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
+            ViewData["UpdatedAtSortParm"] = sortOrder == "updatedAt" ? "updatedAt": "updatedAt_desc";
+
 
             var categories = from a in _context.Category
-                          select a;
+                    select a;
 
             if (!String.IsNullOrEmpty(search))
             {
