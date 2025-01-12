@@ -33,6 +33,17 @@ namespace librarymenagment.Controllers
                     a.name.Contains(search)
                 );
             }
+
+            categories = sortOrder switch
+            {
+                "name_desc" => categories.OrderByDescending(c => c.name),
+                "createdAt" => categories.OrderBy(c => c.createdAt),
+                "createdAt_desc" => categories.OrderByDescending(c => c.createdAt),
+                "updatedAt" => categories.OrderBy(c => c.updatedAt),
+                "updatedAt_desc" => categories.OrderByDescending(c => c.updatedAt),
+                _ => categories.OrderBy(c => c.name),
+            };
+
             return View(await categories.ToListAsync());
         }
 

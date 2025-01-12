@@ -4,11 +4,46 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+    .sort-header {
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+        color: #212529;
+    }
+
+    .sort-header:hover {
+        color: #0056b3;
+    }
+
+    .sort-indicator::after {
+        content: '↕';
+        position: relative;
+        left: 5px;
+        color: #999;
+    }
+
+    .sort-asc::after {
+        content: '↑';
+        position: relative;
+        left: 5px;
+        color: #000;
+    }
+
+    .sort-desc::after {
+        content: '↓';
+        position: relative;
+        left: 5px;
+        color: #000;
+    }
+</style>
+
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <form asp-action="Index" method="get">
     <div class="row mb-3">
         <div class="col-md-9">
@@ -21,14 +56,23 @@
         </div>
     </div>
 </form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "name_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["NameSortParam"]">
+                    @Html.DisplayNameFor(model => model.First().name)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.last_name)
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "lastname" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "lastname_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["LastNameSortParam"]">
+                    @Html.DisplayNameFor(model => model.First().last_name)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.createdAt)
@@ -40,26 +84,23 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.last_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.createdAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.updatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.last_name)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.createdAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.updatedAt)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
