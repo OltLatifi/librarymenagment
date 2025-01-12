@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -20,7 +21,7 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index(string search, string sortOrder)
+        public async Task<IActionResult> Index(string search, string sortOrder, int? pageNumber)
         {
             ViewData["CurrentSearch"] = search;
             ViewData["CurrentSort"] = sortOrder;
@@ -48,7 +49,7 @@ namespace librarymenagment.Controllers
                 _ => categories.OrderBy(c => c.name),
             };
 
-            return View(await categories.ToListAsync());
+            return View(await PaginatedList<Category>.CreateAsync(categories, pageNumber ?? 1));
         }
 
         // GET: Categories/Details/5

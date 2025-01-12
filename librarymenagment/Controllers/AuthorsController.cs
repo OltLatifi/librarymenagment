@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
 using Microsoft.AspNetCore.Authorization;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -22,7 +23,7 @@ namespace librarymenagment.Controllers
 
         // GET: Authors
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index(string search, string sortOrder)
+        public async Task<IActionResult> Index(string search, string sortOrder, int? pageNumber)
         {
             ViewData["CurrentSearch"] = search;
             ViewData["CurrentSort"] = sortOrder;
@@ -55,7 +56,7 @@ namespace librarymenagment.Controllers
                 _ => authors.OrderBy(a => a.name),
             };
 
-            return View(await authors.ToListAsync());
+            return View(await PaginatedList<Author>.CreateAsync(authors, pageNumber ?? 1));
         }
 
 

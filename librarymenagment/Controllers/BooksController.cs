@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
+using System.Drawing.Printing;
 
 namespace librarymenagment.Controllers
 {
@@ -20,7 +22,7 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(string sortOrder, string searchTitle, string authorId, string categoryId)
+        public async Task<IActionResult> Index(string sortOrder, string searchTitle, string authorId, string categoryId, int? pageNumber)
         {
             ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["DescriptionSortParam"] = sortOrder == "description" ? "description_desc" : "description";
@@ -70,7 +72,7 @@ namespace librarymenagment.Controllers
             var categories = _context.Category.ToList();
             ViewBag.Category = categories;
 
-            return View(await books.ToListAsync());
+            return View(await PaginatedList<Book>.CreateAsync(books, pageNumber ?? 1));
         }   
 
         // GET: Books/Details/5

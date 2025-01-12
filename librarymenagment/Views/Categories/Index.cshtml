@@ -1,4 +1,5 @@
-﻿@model IEnumerable<librarymenagment.Models.Category>
+﻿@model PaginatedList<librarymenagment.Models.Category>
+@using librarymenagment.Helpers
 
 @{
     ViewData["Title"] = "Index";
@@ -62,7 +63,7 @@
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["NameSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
-                    @Html.DisplayNameFor(model => model.name)
+                    @Html.DisplayNameFor(model => model.First().name)
                 </a>
             </th>
             <th>
@@ -70,7 +71,7 @@
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["CreatedAtSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
-                    @Html.DisplayNameFor(model => model.createdAt)
+                    @Html.DisplayNameFor(model => model.First().createdAt)
                 </a>
             </th>
             <th>
@@ -78,7 +79,7 @@
                    asp-action="Index" 
                    asp-route-sortOrder="@ViewData["UpdatedAtSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
-                    @Html.DisplayNameFor(model => model.updatedAt)
+                    @Html.DisplayNameFor(model => model.First().updatedAt)
                 </a>
             </th>
             <th></th>
@@ -105,3 +106,23 @@
     }
     </tbody>
 </table>
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+            <a class="page-link" asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-currentSearch="@ViewData["CurrentSearch"]"
+               asp-route-sortOrder="@ViewData["CurrentSort"]">
+                Previous
+            </a>
+        </li>
+        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+            <a class="page-link" asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-currentSearch="@ViewData["CurrentSearch"]"
+               asp-route-sortOrder="@ViewData["CurrentSort"]">
+                Next
+            </a>
+        </li>
+    </ul>
+</nav>
