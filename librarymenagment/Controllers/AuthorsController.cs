@@ -28,6 +28,8 @@ namespace librarymenagment.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["LastNameSortParam"] = sortOrder == "lastname" ? "lastname_desc" : "lastname";
+            ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
+            ViewData["UpdatedAtSortParam"] = sortOrder == "updatedAt" ? "updatedAt_desc" : "updatedAt";
 
             var authors = from a in _context.Author
                           select a;
@@ -46,6 +48,10 @@ namespace librarymenagment.Controllers
                 "name_desc" => authors.OrderByDescending(a => a.name),
                 "lastname" => authors.OrderBy(a => a.last_name),
                 "lastname_desc" => authors.OrderByDescending(a => a.last_name),
+                "createdAt" => authors.OrderBy(a => a.createdAt),
+                "createdAt_desc" => authors.OrderByDescending(a => a.createdAt),
+                "updatedAt" => authors.OrderBy(a => a.updatedAt),
+                "updatedAt_desc" => authors.OrderByDescending(a => a.updatedAt),
                 _ => authors.OrderBy(a => a.name),
             };
 
