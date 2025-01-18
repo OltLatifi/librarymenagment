@@ -65,5 +65,8 @@ namespace librarymenagment.Data
 
             return base.SaveChangesAsync(cancellationToken);
         }
+        public DbSet<Coments> Coments { get; set; } = default!;
+
+        public DbSet<PublishingHouse> PublishingHouses {  get; set; }
     }
 }

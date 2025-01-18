@@ -21,6 +21,9 @@ public class Book : BaseModel
     [ForeignKey("Category")]
     public int CategoryId { get; set; }
 
+    [ForeignKey("PublishingHouse")]
+    public int? PublishingHouseId { get; set; }
+
     public virtual Author? Author { get; set; }
     public virtual Category? Category { get; set; }
 }

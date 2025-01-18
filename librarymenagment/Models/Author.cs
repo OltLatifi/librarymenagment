@@ -1,4 +1,6 @@
-﻿namespace librarymenagment.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace librarymenagment.Models
 {
     public class Author : BaseModel
     {
@@ -6,5 +8,8 @@
         public string Name { get; set; }
         public string LastName { get; set; }
         public string? Bio { get; set; }
+
+        [ForeignKey("PublishingHouse")]
+        public int? PublishingHouseId { get; set; }
     }
 }

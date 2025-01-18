@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using librarymenagment.Data;
 
@@ -11,9 +12,11 @@ using librarymenagment.Data;
 namespace librarymenagment.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250118080639_comments_test")]
+    partial class comments_test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,15 +252,10 @@ namespace librarymenagment.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PublishingHouseId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PublishingHouseId");
 
                     b.ToTable("Author");
                 });
@@ -289,9 +287,6 @@ namespace librarymenagment.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PublishingHouseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -304,8 +299,6 @@ namespace librarymenagment.Data.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("PublishingHouseId");
 
                     b.ToTable("Book");
                 });
@@ -370,39 +363,6 @@ namespace librarymenagment.Data.Migrations
                     b.ToTable("Coments");
                 });
 
-            modelBuilder.Entity("librarymenagment.Models.PublishingHouse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FoundedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PublishingHouses");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -454,13 +414,6 @@ namespace librarymenagment.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("librarymenagment.Models.Author", b =>
-                {
-                    b.HasOne("librarymenagment.Models.PublishingHouse", null)
-                        .WithMany("Authors")
-                        .HasForeignKey("PublishingHouseId");
-                });
-
             modelBuilder.Entity("librarymenagment.Models.Book", b =>
                 {
                     b.HasOne("librarymenagment.Models.Author", "Author")
@@ -474,10 +427,6 @@ namespace librarymenagment.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("librarymenagment.Models.PublishingHouse", null)
-                        .WithMany("PublishedBooks")
-                        .HasForeignKey("PublishingHouseId");
 
                     b.Navigation("Author");
 
@@ -493,13 +442,6 @@ namespace librarymenagment.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("librarymenagment.Models.PublishingHouse", b =>
-                {
-                    b.Navigation("Authors");
-
-                    b.Navigation("PublishedBooks");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,7 +47,10 @@ async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager, UserManager<Ide
     {
         await userManager.AddToRoleAsync(adminUser, "Admin");
     }
+     
 }
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -37,6 +37,19 @@
                                asp-controller="Categories" 
                                asp-action="Index">Categories</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"].ToString() == "Coments" ? "active" : "")"
+                               asp-area=""
+                               asp-controller="Coments"
+                               asp-action="Index">Coments</a>
+                        </li>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"].ToString() == "PublishingHouses" ? "active" : "")"
+                               asp-area=""
+                               asp-controller="PublishingHouses"
+                               asp-action="Index">PublishingHouses</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
