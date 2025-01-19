@@ -90,47 +90,11 @@ namespace librarymenagment.Controllers
             var book = await _context.Book
                 .Include(b => b.Author)
                 .Include(b => b.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.Active == true);
             if (book == null)
             {
                 return NotFound();
             }
-
-            return View(book);
-        }
-
-        // GET: Books/Create
-        public async Task<IActionResult> Create()
-        {
-            var authors = await _context.Author.Where(a => a.Active).ToListAsync();
-            var categories = await _context.Category.Where(c => c.Active).ToListAsync();
-
-            ViewData["AuthorId"] = new SelectList(authors, "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
-
-            return View();
-        }
-
-        // POST: Books/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Copies,AuthorId,CategoryId,Active")] Book book)
-        {
-            if (ModelState.IsValid)
-            {
-                book.Active = true;
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            var authors = await _context.Author.Where(a => a.Active).ToListAsync();
-            var categories = await _context.Category.Where(c => c.Active).ToListAsync();
-
-            ViewData["AuthorId"] = new SelectList(authors, "Id", "Name", book.AuthorId);
-            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", book.CategoryId);
 
             return View(book);
         }
@@ -194,41 +158,6 @@ namespace librarymenagment.Controllers
             ViewData["AuthorId"] = new SelectList(authors, "Id", "Name", book.AuthorId);
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", book.CategoryId);
             return View(book);
-        }
-
-        // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Book
-                .Include(b => b.Author)
-                .Include(b => b.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return View(book);
-        }
-
-        // POST: Books/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var book = await _context.Book.FindAsync(id);
-            if (book != null)
-            {
-                _context.Book.Remove(book);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool BookExists(int id)

@@ -22,7 +22,7 @@ namespace librarymenagment.Controllers
         // GET: Coments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Coments.Include(c => c.Book);
+            var applicationDbContext = _context.Coments.Include(c => c.Book).Where(c => c.Active ==  true);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace librarymenagment.Controllers
 
             var coments = await _context.Coments
                 .Include(c => c.Book)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.Active == true);
             if (coments == null)
             {
                 return NotFound();

@@ -22,7 +22,7 @@ namespace librarymenagment.Controllers
         // GET: PublishingHouses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PublishingHouses.ToListAsync());
+            return View(await _context.PublishingHouses.Where(p => p.Active == true).ToListAsync());
         }
 
         // GET: PublishingHouses/Details/5
@@ -34,7 +34,7 @@ namespace librarymenagment.Controllers
             }
 
             var publishingHouse = await _context.PublishingHouses
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.Active == true);
             if (publishingHouse == null)
             {
                 return NotFound();

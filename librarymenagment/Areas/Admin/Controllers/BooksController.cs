@@ -40,7 +40,6 @@ namespace librarymenagment.Areas.Admin.Controllers
             var books = from b in _context.Book
                         .Include(b => b.Author)
                         .Include(b => b.Category)
-                        where b.Active
                         select b;
 
             if (!String.IsNullOrEmpty(searchTitle))

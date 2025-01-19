@@ -33,7 +33,6 @@ namespace librarymenagment.Areas.Admin.Controllers
             ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
 
             var categories = from a in _context.Category
-                    where a.Active
                     select a;
 
             if (!String.IsNullOrEmpty(search))

@@ -29,9 +29,7 @@ namespace librarymenagment.Areas.Admin.Controllers
             ViewData["UpdatedAtSortParam"] = sortOrder == "updatedAt" ? "updatedAt_desc" : "updatedAt";
             ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
 
-            var authors = from a in _context.Author
-                          where a.Active
-                          select a;
+            var authors = from a in _context.Author select a;
 
             if (!String.IsNullOrEmpty(search))
             {
