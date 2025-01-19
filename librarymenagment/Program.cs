@@ -41,6 +41,7 @@ async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager, UserManager<Ide
     }
 
     var adminEmail = "oltlatifi2003@gmail.com";
+
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
     if (adminUser != null && !(await userManager.IsInRoleAsync(adminUser, "Admin")))
@@ -72,12 +73,18 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "admin",
+    pattern: "Admin/{controller=Home}/{action=Index}/{id?}",
+    defaults: new { area = "Admin" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
     
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();
