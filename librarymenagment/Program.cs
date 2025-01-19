@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using librarymenagment;
+using librarymenagment.MIddlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +83,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseMiddleware<AdminRedirectMiddleware>();
 
 app.MapControllerRoute(
     name: "admin",
