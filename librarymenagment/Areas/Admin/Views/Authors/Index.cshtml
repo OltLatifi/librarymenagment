@@ -1,0 +1,152 @@
+﻿@model PaginatedList<librarymenagment.Models.Author>
+@using librarymenagment.Helpers
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .sort-header {
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+        color: #212529;
+    }
+
+    .sort-header:hover {
+        color: #0056b3;
+    }
+
+    .sort-indicator::after {
+        content: '↕';
+        position: relative;
+        left: 5px;
+        color: #999;
+    }
+
+    .sort-asc::after {
+        content: '↑';
+        position: relative;
+        left: 5px;
+        color: #000;
+    }
+
+    .sort-desc::after {
+        content: '↓';
+        position: relative;
+        left: 5px;
+        color: #000;
+    }
+</style>
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="row mb-3">
+        <div class="col-md-9">
+            <label class="form-label">Search:</label>
+            <input type="text" name="search" class="form-control" value="@ViewData["CurrentSearch"]" />
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear Filters</a>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "name_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["NameSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
+                    @Html.DisplayNameFor(model => model.First().Name)
+                </a>
+            </th>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "lastname" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "lastname_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["LastNameSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
+                    @Html.DisplayNameFor(model => model.First().LastName)
+                </a>
+            </th>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "createdAt" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "createdAt_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["CreatedAtSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
+                    @Html.DisplayNameFor(model => model.First().CreatedAt)
+                </a>
+            </th>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "updatedAt" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "updatedAt_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["UpdatedAtSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
+                    @Html.DisplayNameFor(model => model.First().UpdatedAt)
+                </a>
+            </th>
+            <th>
+                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : "sort-indicator")"
+                   asp-action="Index" 
+                   asp-route-sortOrder="@ViewData["ActiveSortParam"]"
+                   asp-route-search="@ViewData["CurrentSearch"]">
+                    @Html.DisplayNameFor(model => model.First().Active)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+            <a class="page-link" asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-currentSearch="@ViewData["CurrentSearch"]"
+               asp-route-sortOrder="@ViewData["CurrentSort"]">
+                Previous
+            </a>
+        </li>
+        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+            <a class="page-link" asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-currentSearch="@ViewData["CurrentSearch"]"
+               asp-route-sortOrder="@ViewData["CurrentSort"]">
+                Next
+            </a>
+        </li>
+    </ul>
+</nav>
