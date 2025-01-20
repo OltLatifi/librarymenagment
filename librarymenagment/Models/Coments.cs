@@ -12,11 +12,8 @@ public class Coments : BaseModel
     public string Description { get; set; }
 
 
-
-
-    [Required(ErrorMessage = "Please select an user.")]
     [ForeignKey("User")]
-    public int UserId { get; set; }
+    public string? UserId { get; set; }
 
 
     [Required(ErrorMessage = "Please select a book.")]
@@ -25,4 +22,5 @@ public class Coments : BaseModel
 
 
     public virtual Book? Book { get; set; }
+    public virtual IdentityUser? User { get; set; }
 }

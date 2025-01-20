@@ -1,4 +1,6 @@
-﻿@model librarymenagment.Models.Book
+﻿@using Microsoft.AspNetCore.Identity
+@model librarymenagment.Models.Book
+@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Details";
@@ -65,3 +67,64 @@
     <a asp-area="Admin" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-area="Admin" asp-action="Index">Back to List</a>
 </div>
+<div class="mt-6">
+	<h3>Comments</h3>
+    <div id="comments-list">
+        <p>No comments</p>
+    </div>
+    <form id="CommentForm" method="post">
+        <input type="text" name="Comment" value="" />
+		<button>Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function addComments(data) {
+            function addComment(comment){
+				$("#comments-list").append(`
+					<h4>${comment.user.email}</h4>
+                    <p>${comment.description}</p>
+                `);
+            }
+            if (data.length > 0) {
+                $("#comments-list").empty();
+            } else {
+                $(addComment).html("<p>No comments</p>");
+            }
+			data.map(el => addComment(el)); 
+        }
+
+        function getComments(){
+             $.ajax({
+                url: "/api/Comments?bookId=" + @Model?.Id,
+                type: "GET",
+                success: function (data) {
+                    addComments(data);
+                }
+            });
+        }
+
+	    $(document).ready(function () {
+			getComments();
+
+			$("#CommentForm").submit(function (e) {
+				e.preventDefault();
+                const payload = {
+                    BookId: @Model?.Id,
+                    Description: $("input[name='Comment']").val(),
+                    Active: true,
+                }
+				$.ajax({
+					url: "/api/Comments",
+					type: "POST",
+                    contentType: "application/json",
+					data: JSON.stringify(payload),
+					success: function (data) {
+                       getComments();
+					}
+				});
+			});
+	    });
+    </script>
+}
