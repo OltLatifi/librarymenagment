@@ -79,22 +79,27 @@ namespace librarymenagment.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Entry(comment).State = EntityState.Modified;
+                if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    _context.Entry(comment).State = EntityState.Modified;
 
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Coments.Any(e => e.Id == id))
+                    try
                     {
-                        return NotFound();
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!_context.Coments.Any(e => e.Id == id)){
+                            return NotFound();
+                        }
+                        else {
+                            throw;
+                        }
+                        }
                     }
+                else
+                {
+                    return Unauthorized("User not authenticated.");
                 }
 
                 return NoContent();
@@ -107,16 +112,23 @@ namespace librarymenagment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var comment = await _context.Coments.FindAsync(id);
-            if (comment == null)
+            if (User.Identity?.IsAuthenticated ?? false)
             {
-                return NotFound();
+                var comment = await _context.Coments.FindAsync(id);
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Coments.Remove(comment);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.Coments.Remove(comment);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            else
+            {
+                return Unauthorized("User not authenticated.");
+            }
         }
     }
 }

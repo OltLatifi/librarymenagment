@@ -80,19 +80,48 @@
 
 @section Scripts {
     <script>
+        const currentUserEmail = "@UserManager.GetUserAsync(User).Result?.Email";
+
         function addComments(data) {
-            function addComment(comment){
-				$("#comments-list").append(`
-					<h4>${comment.user.email}</h4>
-                    <p>${comment.description}</p>
+            function addComment(comment) {
+                const isAuthor = comment.user.email === currentUserEmail;
+                const actionButtons = isAuthor ? `
+                    <div class="comment-actions">
+                        <button onclick="toggleEditMode(${comment.id})">Edit</button>
+                        <button onclick="deleteComment(${comment.id})">Delete</button>
+                    </div>
+                    <div class="edit-form-${comment.id}" style="display: none;">
+                        <input type="text" value="${comment.description}" class="edit-input-${comment.id}"/>
+                        <button onclick="submitEdit(${comment.id})">Save</button>
+                        <button onclick="toggleEditMode(${comment.id})">Cancel</button>
+                    </div>
+                ` : '';
+
+                $("#comments-list").append(`
+                    <div class="comment-${comment.id}">
+                        <h4>${comment.user.email}</h4>
+                        <p class="comment-text-${comment.id}">${comment.description}</p>
+                        ${actionButtons}
+                    </div>
                 `);
             }
+            
             if (data.length > 0) {
                 $("#comments-list").empty();
+                data.map(el => addComment(el));
             } else {
-                $(addComment).html("<p>No comments</p>");
+                $("#comments-list").html("<p>No comments</p>");
             }
-			data.map(el => addComment(el)); 
+        }
+
+        function toggleEditMode(commentId) {
+            $(`.edit-form-${commentId}`).toggle();
+            $(`.comment-text-${commentId}`).toggle();
+        }
+
+        function submitEdit(commentId) {
+            const newDescription = $(`.edit-input-${commentId}`).val();
+            updateComment(commentId, newDescription);
         }
 
         function getComments(){
@@ -101,6 +130,27 @@
                 type: "GET",
                 success: function (data) {
                     addComments(data);
+                }
+            });
+        }
+
+        function deleteComment(id){
+            $.ajax({
+                url: "/api/Comments?id=" + id,
+                type: "DELETE",
+                success: function (data) {
+                    getComments();
+                }
+            });
+        }
+
+        function updateComment(id, description){
+            $.ajax({
+                url: "/api/Comments?id=" + id,
+                type: "PUT",
+                data: { description: description },
+                success: function (data) {
+                    getComments();
                 }
             });
         }
