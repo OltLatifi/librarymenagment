@@ -4,6 +4,7 @@ using librarymenagment.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace librarymenagment.Controllers
 {
@@ -12,10 +13,12 @@ namespace librarymenagment.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<CommentsController> _logger;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(ApplicationDbContext context, ILogger<CommentsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/<CommentsController>
@@ -67,45 +70,53 @@ namespace librarymenagment.Controllers
             return CreatedAtAction(nameof(Get), new { bookId = comment.BookId }, comment);
         }
 
-
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Coments comment)
         {
-            if (id != comment.Id)
+            comment.Id = id;
+
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            if (ModelState.IsValid)
+            if (User.Identity?.IsAuthenticated ?? false)
             {
-                if (User.Identity?.IsAuthenticated ?? false)
-                {
-                    _context.Entry(comment).State = EntityState.Modified;
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!_context.Coments.Any(e => e.Id == id)){
-                            return NotFound();
-                        }
-                        else {
-                            throw;
-                        }
-                        }
-                    }
-                else
+                if (string.IsNullOrEmpty(userId))
                 {
-                    return Unauthorized("User not authenticated.");
+                    return Unauthorized("User ID is missing from claims.");
+                }
+
+                comment.UserId = userId;
+                _context.Entry(comment).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    if (!_context.Coments.Any(e => e.Id == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        _logger.LogError(ex, "Concurrency error occurred while updating comment.");
+                        throw;
+                    }
                 }
 
                 return NoContent();
             }
-
-            return BadRequest(ModelState);
+            else
+            {
+                return Unauthorized("User not authenticated.");
+            }
         }
 
         // DELETE api/<CommentsController>/5
@@ -132,3 +143,4 @@ namespace librarymenagment.Controllers
         }
     }
 }
+

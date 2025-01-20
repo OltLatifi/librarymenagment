@@ -84,7 +84,7 @@
 
         function addComments(data) {
             function addComment(comment) {
-                const isAuthor = comment.user.email === currentUserEmail;
+                const isAuthor = comment.user?.email === currentUserEmail;
                 const actionButtons = isAuthor ? `
                     <div class="comment-actions">
                         <button onclick="toggleEditMode(${comment.id})">Edit</button>
@@ -99,7 +99,7 @@
 
                 $("#comments-list").append(`
                     <div class="comment-${comment.id}">
-                        <h4>${comment.user.email}</h4>
+                        <h4>${comment.user?.email}</h4>
                         <p class="comment-text-${comment.id}">${comment.description}</p>
                         ${actionButtons}
                     </div>
@@ -122,7 +122,7 @@
         function submitEdit(commentId) {
             const newDescription = $(`.edit-input-${commentId}`).val();
             updateComment(commentId, newDescription);
-        }
+        } 
 
         function getComments(){
              $.ajax({
@@ -136,7 +136,7 @@
 
         function deleteComment(id){
             $.ajax({
-                url: "/api/Comments?id=" + id,
+                url: "/api/Comments/" + id,
                 type: "DELETE",
                 success: function (data) {
                     getComments();
@@ -144,16 +144,27 @@
             });
         }
 
-        function updateComment(id, description){
+        function updateComment(id, description) {
+            const payload = {
+                Id: id,
+                BookId: @Model?.Id,
+                Description: description,
+                Active: true
+            };
             $.ajax({
-                url: "/api/Comments?id=" + id,
+                url: "/api/Comments/" + id,
                 type: "PUT",
-                data: { description: description },
+                contentType: "application/json",
+                data: JSON.stringify(payload),
                 success: function (data) {
                     getComments();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error updating comment:", error);
                 }
             });
         }
+
 
 	    $(document).ready(function () {
 			getComments();
