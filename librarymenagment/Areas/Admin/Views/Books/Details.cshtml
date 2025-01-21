@@ -6,76 +6,82 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="book-details-container">
+    <h1 class="page-title">Book Details</h1>
 
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Copies)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Copies)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author.Name)
-            @Html.DisplayFor(model => model.Author.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-                <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Active)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Active)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-area="Admin" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-area="Admin" asp-action="Index">Back to List</a>
-</div>
-<div class="mt-6">
-	<h3>Comments</h3>
-    <div id="comments-list">
-        <p>No comments</p>
+    <div class="book-info-card">
+        <h4 class="card-title">Book Information</h4>
+        <hr />
+        <dl class="row details-list">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Copies)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Copies)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Author)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Author.Name)
+                @Html.DisplayFor(model => model.Author.LastName)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Category)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Category.Name)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.UpdatedAt)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.UpdatedAt)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Active)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Active)
+            </dd>
+        </dl>
     </div>
-    <form id="CommentForm" method="post">
-        <input type="text" name="Comment" value="" />
-		<button>Submit</button>
-    </form>
+
+    <div class="action-buttons">
+        <a class="btn btn-primary" asp-area="Admin" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        <a class="btn btn-secondary" asp-area="Admin" asp-action="Index">Back to List</a>
+    </div>
+
+    <div class="comments-section mt-6">
+        <h3 class="comments-title">Comments</h3>
+        <div id="comments-list" class="comments-container">
+            <p class="no-comments">No comments</p>
+        </div>
+        <form id="CommentForm" method="post" class="comment-form">
+            <div class="input-group">
+                <input type="text" name="Comment" class="form-control" placeholder="Write a comment..." />
+                <button class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section Scripts {
@@ -189,3 +195,154 @@
 	    });
     </script>
 }
+
+<style>
+    .book-details-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .page-title {
+        color: #2c3e50;
+        margin-bottom: 2rem;
+        font-weight: 600;
+    }
+
+    .book-info-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .card-title {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+    }
+
+    .details-list dt {
+        color: #666;
+        font-weight: 600;
+    }
+
+    .details-list dd {
+        margin-bottom: 1rem;
+    }
+
+    .action-buttons {
+        margin: 2rem 0;
+    }
+
+    .action-buttons .btn {
+        margin-right: 1rem;
+    }
+
+    .comments-section {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 2rem;
+    }
+
+    .comments-title {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+    }
+
+    .comments-container {
+        margin-bottom: 2rem;
+    }
+
+    .comment-form {
+        margin-top: 2rem;
+    }
+
+    .comment-form .input-group {
+        margin-bottom: 1rem;
+    }
+
+    /* Style for individual comments */
+    [class^="comment-"] {
+        border-bottom: 1px solid #eee;
+        padding: 1rem 0;
+    }
+
+    [class^="comment-"] h4 {
+        color: #2c3e50;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    [class^="comment-"] p {
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-actions {
+        margin-top: 0.5rem;
+    }
+
+    .comment-actions button {
+        background: none;
+        border: none;
+        color: #3498db;
+        margin-right: 1rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .comment-actions button:hover {
+        color: #2980b9;
+    }
+
+    [class^="edit-form-"] {
+        margin-top: 0.5rem;
+    }
+
+    [class^="edit-form-"] input {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    [class^="edit-form-"] button {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin-right: 0.5rem;
+        cursor: pointer;
+    }
+
+    [class^="edit-form-"] button:last-child {
+        background: #95a5a6;
+    }
+
+    .no-comments {
+        color: #95a5a6;
+        font-style: italic;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .book-details-container {
+            margin: 1rem auto;
+        }
+
+        .book-info-card,
+        .comments-section {
+            padding: 1rem;
+        }
+
+        .action-buttons .btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
