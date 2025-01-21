@@ -1,10 +1,11 @@
 ﻿@model PaginatedList<librarymenagment.Models.Book>
 @using librarymenagment.Helpers
-
-
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Index";
+    var userBookPermissions = ViewBag.UserBookPermissions as Dictionary<int, List<string>>;
+    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
 }
 
 <style>
@@ -15,9 +16,9 @@
         color: #212529;
     }
 
-    .sort-header:hover {
-        color: #0056b3;
-    }
+        .sort-header:hover {
+            color: #0056b3;
+        }
 
     .sort-indicator::after {
         content: '↕';
@@ -112,11 +113,11 @@
                 <thead>
                     <tr>
                         <th>
-                            <a class="sort-header @(ViewData["CurrentSort"] == null ? "sort-asc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "title_desc" ? "sort-desc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "title" ? "sort-asc" : 
+                            <a class="sort-header @(ViewData["CurrentSort"] == null ? "sort-asc" :
+                                               ViewData["CurrentSort"]?.ToString() == "title_desc" ? "sort-desc" :
+                                               ViewData["CurrentSort"]?.ToString() == "title" ? "sort-asc" :
                                                "sort-indicator")"
-                               asp-action="Index" 
+                               asp-action="Index"
                                asp-route-sortOrder="@ViewData["TitleSortParam"]"
                                asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
                                asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
@@ -125,10 +126,10 @@
                             </a>
                         </th>
                         <th>
-                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "description" ? "sort-asc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "description_desc" ? "sort-desc" : 
+                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "description" ? "sort-asc" :
+                                               ViewData["CurrentSort"]?.ToString() == "description_desc" ? "sort-desc" :
                                                "sort-indicator")"
-                               asp-action="Index" 
+                               asp-action="Index"
                                asp-route-sortOrder="@ViewData["DescriptionSortParam"]"
                                asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
                                asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
@@ -137,10 +138,10 @@
                             </a>
                         </th>
                         <th>
-                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "copies" ? "sort-asc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "copies_desc" ? "sort-desc" : 
+                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "copies" ? "sort-asc" :
+                                               ViewData["CurrentSort"]?.ToString() == "copies_desc" ? "sort-desc" :
                                                "sort-indicator")"
-                               asp-action="Index" 
+                               asp-action="Index"
                                asp-route-sortOrder="@ViewData["CopiesSortParam"]"
                                asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
                                asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
@@ -149,10 +150,10 @@
                             </a>
                         </th>
                         <th>
-                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "author" ? "sort-asc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "author_desc" ? "sort-desc" : 
+                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "author" ? "sort-asc" :
+                                               ViewData["CurrentSort"]?.ToString() == "author_desc" ? "sort-desc" :
                                                "sort-indicator")"
-                               asp-action="Index" 
+                               asp-action="Index"
                                asp-route-sortOrder="@ViewData["AuthorSortParam"]"
                                asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
                                asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
@@ -161,10 +162,10 @@
                             </a>
                         </th>
                         <th>
-                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "category" ? "sort-asc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "category_desc" ? "sort-desc" : 
+                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "category" ? "sort-asc" :
+                                               ViewData["CurrentSort"]?.ToString() == "category_desc" ? "sort-desc" :
                                                "sort-indicator")"
-                               asp-action="Index" 
+                               asp-action="Index"
                                asp-route-sortOrder="@ViewData["CategorySortParam"]"
                                asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
                                asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
@@ -173,10 +174,10 @@
                             </a>
                         </th>
                         <th>
-                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : 
-                                               ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : 
+                            <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" :
+                                               ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" :
                                                "sort-indicator")"
-                               asp-action="Index" 
+                               asp-action="Index"
                                asp-route-sortOrder="@ViewData["ActiveSortParam"]"
                                asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
                                asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
@@ -201,17 +202,26 @@
                                 @Html.DisplayFor(modelItem => item.Copies)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Author.Name) @Html.DisplayFor(modelItem => item.Author.LastName)
+                                @if (item.Author != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Author.Name) @Html.DisplayFor(modelItem => item.Author.LastName)
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Category.Name)
+                                @if (item.Category != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Category.Name)
+                                }
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Active)
                             </td>
                             <td>
-                                @* <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> *@
-                                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                @if (userBookPermissions != null && userBookPermissions.ContainsKey(item.Id) && userBookPermissions[item.Id].Contains(currentUserId))
+                                {
+                                    <a class="btn btn-primary" asp-area="" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                }
+                                <a class="btn btn-info" asp-area="" asp-action="Details" asp-route-id="@item.Id">Details</a>
                             </td>
                         </tr>
                     }
