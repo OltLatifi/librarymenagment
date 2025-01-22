@@ -19,10 +19,11 @@ namespace librarymenagment.Areas.Admin.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string search, string sortOrder, int? pageNumber)
+        public async Task<IActionResult> Index(string search, string sortOrder, bool? activeOnly, int? pageNumber)
         {
             ViewData["CurrentSearch"] = search;
             ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentActiveFilter"] = activeOnly;
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["LastNameSortParam"] = sortOrder == "lastname" ? "lastname_desc" : "lastname";
             ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
@@ -30,6 +31,11 @@ namespace librarymenagment.Areas.Admin.Controllers
             ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
 
             var authors = from a in _context.Author select a;
+
+            if (activeOnly == true)
+            {
+                authors = authors.Where(a => a.Active);
+            }
 
             if (!String.IsNullOrEmpty(search))
             {

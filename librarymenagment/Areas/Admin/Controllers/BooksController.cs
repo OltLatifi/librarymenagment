@@ -24,7 +24,7 @@ namespace librarymenagment.Areas.Admin.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchTitle, string authorId, string categoryId, int? pageNumber)
+        public async Task<IActionResult> Index(string sortOrder, string searchTitle, string authorId, string categoryId, bool? activeOnly, int? pageNumber)
         {
             ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["DescriptionSortParam"] = sortOrder == "description" ? "description_desc" : "description";
@@ -36,6 +36,7 @@ namespace librarymenagment.Areas.Admin.Controllers
             ViewData["CurrentTitleFilter"] = searchTitle;
             ViewData["CurrentAuthorFilter"] = authorId;
             ViewData["CurrentCategoryFilter"] = categoryId;
+            ViewData["CurrentActiveFilter"] = activeOnly;
 
             var books = from b in _context.Book
                         .Include(b => b.Author)
@@ -55,6 +56,11 @@ namespace librarymenagment.Areas.Admin.Controllers
             {
                 int categoryIdInt = int.Parse(categoryId);
                 books = books.Where(b => b.CategoryId == categoryIdInt);
+            }
+
+            if (activeOnly == true)
+            {
+                books = books.Where(b => b.Active);
             }
 
             books = sortOrder switch

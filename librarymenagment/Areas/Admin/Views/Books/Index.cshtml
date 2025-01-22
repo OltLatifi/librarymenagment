@@ -78,8 +78,16 @@
                 }
             </select>
         </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+        <div class="col-md-2">
+            <div class="form-check mt-4">
+                <input class="form-check-input" type="checkbox" name="activeOnly" id="activeOnly" value="true" @(ViewData["CurrentActiveFilter"]?.ToString() == "True" ? "checked" : "")>
+                <label class="form-check-label" for="activeOnly">
+                    Active Only
+                </label>
+            </div>
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary me-2">Apply</button>
             <a asp-area="Admin" asp-action="Index" class="btn btn-secondary">Clear Filters</a>
         </div>
     </div>
