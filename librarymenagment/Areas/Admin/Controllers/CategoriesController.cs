@@ -91,7 +91,6 @@ namespace librarymenagment.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                category.Active = true;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

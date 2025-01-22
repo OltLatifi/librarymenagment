@@ -122,7 +122,6 @@ namespace librarymenagment.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                book.Active = true;
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

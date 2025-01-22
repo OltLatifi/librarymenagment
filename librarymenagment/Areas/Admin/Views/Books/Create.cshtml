@@ -1,16 +1,14 @@
 ﻿@model librarymenagment.Models.Book
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Book";
 }
 
-<h1>Create</h1>
-
-<h4>Book</h4>
+<h1 class="mt-4">Create Book</h1>
 <hr />
-<div class="row">
-    <div class="col-12 col-md-6">
-        <form asp-area="Admin" asp-action="Create" method="post">
+<div class="row border mt-4" style="background: white;">
+    <div class="col-12 col-md-6 p-4">
+        <form class="d-flex flex-column gap-2" asp-area="Admin" asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -48,15 +46,15 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group mt-4">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-area="Admin" asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-area="Admin" asp-action="Index">Back to List</a>
+    <div class="col-12 col-md-6 p-0">
+        <img class="w-100 h-100" src="/images/book-background.jpg" alt="Background Image" />
+    </div>
 </div>
 
 @section Scripts {
