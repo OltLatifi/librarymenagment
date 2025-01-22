@@ -29,3 +29,62 @@ body {
     font-weight: bold !important;
     color: #0366d6 !important;
 }
+
+.book-details-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.page-title {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.book-info-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.card-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.details-list dt {
+    color: #666;
+    font-weight: 600;
+}
+
+.details-list dd {
+    margin-bottom: 1rem;
+}
+
+.action-buttons {
+    margin: 2rem 0;
+}
+
+.action-buttons .btn {
+    margin-right: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .book-details-container {
+        margin: 1rem auto;
+    }
+
+    .book-info-card {
+        padding: 1rem;
+    }
+
+    .action-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
