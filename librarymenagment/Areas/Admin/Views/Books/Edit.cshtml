@@ -30,6 +30,10 @@
                 <label asp-for="AuthorId" class="control-label">Author</label>
                 <select asp-for="AuthorId" class="form-control" asp-items="@(ViewData["AuthorId"] as SelectList)">
                     <option value="">-- Select an Author --</option>
+                    @foreach (var author in (SelectList)ViewData["AuthorId"])
+                    {
+                        <option value="@author.Value" selected="@(author.Selected ? "selected" : "")">@author.Text</option>
+                    }
                 </select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
@@ -37,6 +41,10 @@
                 <label asp-for="CategoryId" class="control-label">Category</label>
                 <select asp-for="CategoryId" class="form-control" asp-items="@(ViewData["CategoryId"] as SelectList)">
                     <option value="">-- Select a Category --</option>
+                    @foreach (var category in (SelectList)ViewData["CategoryId"])
+                    {
+                        <option value="@category.Value" selected="@(category.Selected ? "selected" : "")">@category.Text</option>
+                    }
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
