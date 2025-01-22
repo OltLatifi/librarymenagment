@@ -9,6 +9,7 @@ using librarymenagment.Data;
 using librarymenagment.Models;
 using librarymenagment.Helpers;
 using System.Drawing.Printing;
+using System.Security.Claims;
 
 namespace librarymenagment.Controllers
 {
@@ -76,6 +77,14 @@ namespace librarymenagment.Controllers
             var categories = _context.Category.ToList();
             ViewBag.Category = categories;
 
+            var userBookPermissions = await _context.UserBookPermission.ToListAsync();
+
+            var userBookPermissionDict = userBookPermissions
+                .GroupBy(ubp => ubp.BookId)
+                .ToDictionary(g => g.Key, g => g.Select(ubp => ubp.UserId).ToList());
+
+            ViewBag.UserBookPermissions = userBookPermissionDict;
+
             return View(await PaginatedList<Book>.CreateAsync(books, pageNumber ?? 1));
         }   
 
@@ -112,6 +121,16 @@ namespace librarymenagment.Controllers
             {
                 return NotFound();
             }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var hasPermission = await _context.UserBookPermission
+                .AnyAsync(ubp => ubp.BookId == id && ubp.UserId == userId);
+
+            if (!hasPermission)
+            {
+                return Forbid();
+            }
+
             var authors = await _context.Author.Where(a => a.Active).ToListAsync();
             var categories = await _context.Category.Where(c => c.Active).ToListAsync();
 
@@ -120,9 +139,6 @@ namespace librarymenagment.Controllers
             return View(book);
         }
 
-        // POST: Books/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Copies,AuthorId,CategoryId,Active")] Book book)
@@ -130,6 +146,15 @@ namespace librarymenagment.Controllers
             if (id != book.Id)
             {
                 return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var hasPermission = await _context.UserBookPermission
+                .AnyAsync(ubp => ubp.BookId == id && ubp.UserId == userId);
+
+            if (!hasPermission)
+            {
+                return Forbid();
             }
 
             if (ModelState.IsValid)
@@ -150,7 +175,12 @@ namespace librarymenagment.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                // Check if the user has permission to access the Index page
+                var canAccessIndex = await _context.UserBookPermission
+                    .AnyAsync(ubp => ubp.UserId == userId);
+
+                return RedirectToAction(nameof(Index), "Books", new { area = "" });
             }
             var authors = await _context.Author.Where(a => a.Active).ToListAsync();
             var categories = await _context.Category.Where(c => c.Active).ToListAsync();
@@ -159,6 +189,8 @@ namespace librarymenagment.Controllers
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", book.CategoryId);
             return View(book);
         }
+
+
 
         private bool BookExists(int id)
         {

@@ -69,5 +69,6 @@ namespace librarymenagment.Data
 
         public DbSet<PublishingHouse> PublishingHouses {  get; set; }
         public DbSet<librarymenagment.Models.Available> Available { get; set; } = default!;
+        public DbSet<UserBookPermission> UserBookPermission { get; set; }
     }
 }
