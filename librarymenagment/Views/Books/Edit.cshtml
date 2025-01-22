@@ -1,16 +1,14 @@
 ﻿@model librarymenagment.Models.Book
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Book";
 }
 
-<h1>Edit</h1>
-
-<h4>Book</h4>
+<h1 class="mt-4">Edit Book</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-area="" asp-controller="Books" asp-action="Edit" method="post">
+<div class="row border mt-4" style="background: white;">
+    <div class="col-12 col-md-6 p-4">
+        <form class="d-flex flex-column gap-2" asp-controller="Books" asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -32,6 +30,10 @@
                 <label asp-for="AuthorId" class="control-label">Author</label>
                 <select asp-for="AuthorId" class="form-control" asp-items="@(ViewData["AuthorId"] as SelectList)">
                     <option value="">-- Select an Author --</option>
+                    @foreach (var author in (SelectList)ViewData["AuthorId"])
+                    {
+                        <option value="@author.Value" selected="@(author.Selected ? "selected" : "")">@author.Text</option>
+                    }
                 </select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
@@ -39,6 +41,10 @@
                 <label asp-for="CategoryId" class="control-label">Category</label>
                 <select asp-for="CategoryId" class="form-control" asp-items="@(ViewData["CategoryId"] as SelectList)">
                     <option value="">-- Select a Category --</option>
+                    @foreach (var category in (SelectList)ViewData["CategoryId"])
+                    {
+                        <option value="@category.Value" selected="@(category.Selected ? "selected" : "")">@category.Text</option>
+                    }
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
@@ -46,15 +52,15 @@
                 <input asp-for="Active" class="form-check-input" type="checkbox" />
                 <label class="form-check-label" asp-for="Active"></label>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="col-12 col-md-6 p-0">
+        <img class="w-100 h-100" src="/images/book-background.jpg" alt="Background Image" />
+    </div>
 </div>
 
 @section Scripts {
