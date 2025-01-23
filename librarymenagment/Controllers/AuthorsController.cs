@@ -22,7 +22,6 @@ namespace librarymenagment.Controllers
         }
 
         // GET: Authors
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string search, string sortOrder, int? pageNumber)
         {
             ViewData["CurrentSearch"] = search;
@@ -65,8 +64,7 @@ namespace librarymenagment.Controllers
 
 
 
-        // GET: Authors/Details/5
-        [Authorize(Roles = "Admin")]
+        // GET: Authors/Details/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -83,63 +81,6 @@ namespace librarymenagment.Controllers
             }
 
             return View(author);
-        }
-
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var author = await _context.Author
-                .FirstOrDefaultAsync(m => m.Id == id && m.Active == true);
-
-            if (author == null)
-            {
-                return NotFound();
-            }
-            return View(author);
-        }
-
-        // POST: Authors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,Active")] Author author)
-        {
-            if (id != author.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(author);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AuthorExists(author.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(author);
-        }
-        private bool AuthorExists(int id)
-        {
-            return _context.Author.Any(e => e.Id == id);
         }
     }
 }

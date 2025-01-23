@@ -7,14 +7,14 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0">Categories Management</h1>
-    <a asp-action="Create" class="btn btn-primary">
+    <a asp-area="" asp-action="Create" class="btn btn-primary">
         <i class="bi bi-plus-lg"></i> Add New Category
     </a>
 </div>
 
 <div class="card shadow-sm mb-4">
     <div class="card-body">
-        <form asp-action="Index" method="get">
+        <form asp-area="" asp-action="Index" method="get">
             <div class="row g-3">
                 <div class="col-md-9">
                     <div class="input-group">
@@ -27,7 +27,7 @@
                 <div class="col-md-3">
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary flex-grow-1">Search</button>
-                        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                        <a asp-area="" asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                     </div>
                 </div>
             </div>
@@ -46,9 +46,9 @@
         font-weight: 600;
     }
 
-    .sort-header:hover {
-        color: var(--bs-primary);
-    }
+        .sort-header:hover {
+            color: var(--bs-primary);
+        }
 
     .sort-indicator::after,
     .sort-asc::after,
@@ -59,18 +59,18 @@
     }
 
     .sort-indicator::after {
-        content: "\F229";
+        content: "↕";
         color: #6c757d;
     }
 
     .sort-asc::after {
-        content: "\F229";
+        content: "↑";
         color: var(--bs-primary);
         transform: rotate(180deg);
     }
 
     .sort-desc::after {
-        content: "\F229";
+        content: "↓";
         color: var(--bs-primary);
     }
 
@@ -78,10 +78,10 @@
         --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
     }
 
-    .table th {
-        background-color: #f8f9fa;
-        border-bottom-width: 1px;
-    }
+        .table th {
+            background-color: #f8f9fa;
+            border-bottom-width: 1px;
+        }
 </style>
 
 <div class="card shadow-sm">
@@ -91,7 +91,7 @@
                 <tr>
                     <th>
                         <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "name_desc" ? "sort-desc" : "sort-indicator")"
-                           asp-action="Index" 
+                           asp-area="" asp-action="Index"
                            asp-route-sortOrder="@ViewData["NameSortParam"]"
                            asp-route-search="@ViewData["CurrentSearch"]">
                             @Html.DisplayNameFor(model => model.First().Name)
@@ -99,7 +99,7 @@
                     </th>
                     <th>
                         <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "createdAt" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "createdAt_desc" ? "sort-desc" : "sort-indicator")"
-                           asp-action="Index" 
+                           asp-area="" asp-action="Index"
                            asp-route-sortOrder="@ViewData["CreatedAtSortParam"]"
                            asp-route-search="@ViewData["CurrentSearch"]">
                             @Html.DisplayNameFor(model => model.First().CreatedAt)
@@ -107,7 +107,7 @@
                     </th>
                     <th>
                         <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "updatedAt" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "updatedAt_desc" ? "sort-desc" : "sort-indicator")"
-                           asp-action="Index" 
+                           asp-area="" asp-action="Index"
                            asp-route-sortOrder="@ViewData["UpdatedAtSortParam"]"
                            asp-route-search="@ViewData["CurrentSearch"]">
                             @Html.DisplayNameFor(model => model.First().UpdatedAt)
@@ -115,7 +115,7 @@
                     </th>
                     <th>
                         <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : "sort-indicator")"
-                           asp-action="Index" 
+                           asp-area="" asp-action="Index"
                            asp-route-sortOrder="@ViewData["ActiveSortParam"]"
                            asp-route-search="@ViewData["CurrentSearch"]">
                             @Html.DisplayNameFor(model => model.First().Active)
@@ -125,26 +125,26 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedAt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdatedAt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Active)
-                    </td>
-                    <td>
-                        @* <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> *@
-                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                </tr>
-            }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Active)
+                        </td>
+                        <td>
+                            <a class="btn btn-info" asp-area="" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -153,7 +153,7 @@
 <nav aria-label="Page navigation" class="mt-4">
     <ul class="pagination justify-content-center">
         <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
-            <a class="page-link" asp-action="Index"
+            <a class="page-link" asp-area="" asp-action="Index"
                asp-route-pageNumber="@(Model.PageIndex - 1)"
                asp-route-currentSearch="@ViewData["CurrentSearch"]"
                asp-route-sortOrder="@ViewData["CurrentSort"]">
@@ -164,7 +164,7 @@
             <span class="page-link">Page @Model.PageIndex</span>
         </li>
         <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
-            <a class="page-link" asp-action="Index"
+            <a class="page-link" asp-area="" asp-action="Index"
                asp-route-pageNumber="@(Model.PageIndex + 1)"
                asp-route-currentSearch="@ViewData["CurrentSearch"]"
                asp-route-sortOrder="@ViewData["CurrentSort"]">

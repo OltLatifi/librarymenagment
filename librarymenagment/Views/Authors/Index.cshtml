@@ -1,7 +1,6 @@
 ﻿@model PaginatedList<librarymenagment.Models.Author>
 @using librarymenagment.Helpers
 
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -14,9 +13,9 @@
         color: #212529;
     }
 
-    .sort-header:hover {
-        color: #0056b3;
-    }
+        .sort-header:hover {
+            color: #0056b3;
+        }
 
     .sort-indicator::after {
         content: '↕';
@@ -42,7 +41,7 @@
 
 <h1>Index</h1>
 
-<form asp-action="Index" method="get">
+<form asp-area="" asp-action="Index" method="get">
     <div class="row mb-3">
         <div class="col-md-9">
             <label class="form-label">Search:</label>
@@ -50,7 +49,7 @@
         </div>
         <div class="col-md-3 d-flex align-items-end">
             <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
-            <a asp-action="Index" class="btn btn-secondary">Clear Filters</a>
+            <a asp-area="" asp-action="Index" class="btn btn-secondary">Clear Filters</a>
         </div>
     </div>
 </form>
@@ -60,7 +59,8 @@
         <tr>
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "name_desc" ? "sort-desc" : "sort-indicator")"
-                   asp-action="Index" 
+                   asp-area=""
+                   asp-action="Index"
                    asp-route-sortOrder="@ViewData["NameSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().Name)
@@ -68,7 +68,8 @@
             </th>
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "lastname" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "lastname_desc" ? "sort-desc" : "sort-indicator")"
-                   asp-action="Index" 
+                   asp-area=""
+                   asp-action="Index"
                    asp-route-sortOrder="@ViewData["LastNameSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().LastName)
@@ -76,7 +77,8 @@
             </th>
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "createdAt" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "createdAt_desc" ? "sort-desc" : "sort-indicator")"
-                   asp-action="Index" 
+                   asp-area=""
+                   asp-action="Index"
                    asp-route-sortOrder="@ViewData["CreatedAtSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().CreatedAt)
@@ -84,7 +86,8 @@
             </th>
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "updatedAt" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "updatedAt_desc" ? "sort-desc" : "sort-indicator")"
-                   asp-action="Index" 
+                   asp-area=""
+                   asp-action="Index"
                    asp-route-sortOrder="@ViewData["UpdatedAtSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().UpdatedAt)
@@ -92,7 +95,8 @@
             </th>
             <th>
                 <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : "sort-indicator")"
-                   asp-action="Index" 
+                   asp-area=""
+                   asp-action="Index"
                    asp-route-sortOrder="@ViewData["ActiveSortParam"]"
                    asp-route-search="@ViewData["CurrentSearch"]">
                     @Html.DisplayNameFor(model => model.First().Active)
@@ -117,8 +121,7 @@
                     @Html.DisplayFor(modelItem => item.Active)
                 </td>
                 <td>
-                    @* <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> *@
-                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-info" asp-area="" asp-action="Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }
@@ -128,7 +131,7 @@
 <nav aria-label="Page navigation">
     <ul class="pagination">
         <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
-            <a class="page-link" asp-action="Index"
+            <a class="page-link" asp-area="" asp-action="Index"
                asp-route-pageNumber="@(Model.PageIndex - 1)"
                asp-route-currentSearch="@ViewData["CurrentSearch"]"
                asp-route-sortOrder="@ViewData["CurrentSort"]">
@@ -136,7 +139,7 @@
             </a>
         </li>
         <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
-            <a class="page-link" asp-action="Index"
+            <a class="page-link" asp-area="" asp-action="Index"
                asp-route-pageNumber="@(Model.PageIndex + 1)"
                asp-route-currentSearch="@ViewData["CurrentSearch"]"
                asp-route-sortOrder="@ViewData["CurrentSort"]">
@@ -145,3 +148,5 @@
         </li>
     </ul>
 </nav>
+
+
