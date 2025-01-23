@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
 
-namespace librarymenagment
+namespace librarymenagment.Controllers
 {
     public class AvailablesController : Controller
     {

@@ -1,8 +1,6 @@
 ﻿@model PaginatedList<librarymenagment.Models.Book>
 @using librarymenagment.Helpers
 
-
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -15,9 +13,9 @@
         color: #212529;
     }
 
-    .sort-header:hover {
-        color: #0056b3;
-    }
+        .sort-header:hover {
+            color: #0056b3;
+        }
 
     .sort-indicator::after {
         content: '↕';
@@ -86,137 +84,131 @@
                 </label>
             </div>
         </div>
-        <div class="col-md-1 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary me-2">Apply</button>
+        <div class="col-md-1 d-flex align-items-end flex-wrap gap-4">
+            <button type="submit" class="btn btn-primary">Apply</button>
             <a asp-area="Admin" asp-action="Index" class="btn btn-secondary">Clear Filters</a>
         </div>
     </div>
 </form>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-    <thead>
-        <tr>
-            <th>
-                <a class="sort-header @(ViewData["CurrentSort"] == null ? "sort-asc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "title_desc" ? "sort-desc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "title" ? "sort-asc" : 
-                                   "sort-indicator")"
-                   asp-action="Index"
-                   asp-area="Admin"
-                   asp-route-sortOrder="@ViewData["TitleSortParam"]"
-                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
-                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
-                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
-                    @Html.DisplayNameFor(model => model.First().Title)
-                </a>
-            </th>
-            <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "description" ? "sort-asc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "description_desc" ? "sort-desc" : 
-                                   "sort-indicator")"
-                   asp-action="Index"
-                   asp-area="Admin"
-                   asp-route-sortOrder="@ViewData["DescriptionSortParam"]"
-                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
-                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
-                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
-                    @Html.DisplayNameFor(model => model.First().Description)
-                </a>
-            </th>
-            <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "copies" ? "sort-asc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "copies_desc" ? "sort-desc" : 
-                                   "sort-indicator")"
-                   asp-action="Index"
-                   asp-area="Admin"
-                   asp-route-sortOrder="@ViewData["CopiesSortParam"]"
-                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
-                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
-                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
-                    @Html.DisplayNameFor(model => model.First().Copies)
-                </a>
-            </th>
-            <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "author" ? "sort-asc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "author_desc" ? "sort-desc" : 
-                                   "sort-indicator")"
-                   asp-action="Index"
-                   asp-area="Admin"
-                   asp-route-sortOrder="@ViewData["AuthorSortParam"]"
-                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
-                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
-                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
-                    @Html.DisplayNameFor(model => model.First().Author)
-                </a>
-            </th>
-            <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "category" ? "sort-asc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "category_desc" ? "sort-desc" : 
-                                   "sort-indicator")"
-                   asp-action="Index"
-                   asp-area="Admin"
-                   asp-route-sortOrder="@ViewData["CategorySortParam"]"
-                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
-                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
-                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
-                    @Html.DisplayNameFor(model => model.First().Category)
-                </a>
-            </th>
-            <th>
-                <a class="sort-header @(ViewData["CurrentSort"]?.ToString() == "active" ? "sort-asc" : 
-                                   ViewData["CurrentSort"]?.ToString() == "active_desc" ? "sort-desc" : 
-                                   "sort-indicator")"
-                   asp-action="Index"
-                   asp-area="Admin"
-                   asp-route-sortOrder="@ViewData["ActiveSortParam"]"
-                   asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
-                   asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
-                   asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
-                    @Html.DisplayNameFor(model => model.First().Active)
-                </a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Copies)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author.Name) @Html.DisplayFor(modelItem => item.Author.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Active)
-                </td>
-                <td>
-                    <a class="btn btn-primary" asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a class="btn btn-info" asp-area="Admin" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a class="btn btn-danger" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-</div>
-</div>
-</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle" style="overflow: scroll;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <a class="sort-header @(ViewData["CurrentSort"] == "title" ? "sort-asc" : ViewData["CurrentSort"] == "title_desc" ? "sort-desc" : "sort-indicator")"
+                                       asp-action="Index"
+                                       asp-area="Admin"
+                                       asp-route-sortOrder="@(ViewData["CurrentSort"] == "title" ? "title_desc" : "title")"
+                                       asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                                       asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                                       asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                                        @Html.DisplayNameFor(model => model.First().Title)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort-header @(ViewData["CurrentSort"] == "description" ? "sort-asc" : ViewData["CurrentSort"] == "description_desc" ? "sort-desc" : "sort-indicator")"
+                                       asp-action="Index"
+                                       asp-area="Admin"
+                                       asp-route-sortOrder="@(ViewData["CurrentSort"] == "description" ? "description_desc" : "description")"
+                                       asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                                       asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                                       asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                                        @Html.DisplayNameFor(model => model.First().Description)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort-header @(ViewData["CurrentSort"] == "copies" ? "sort-asc" : ViewData["CurrentSort"] == "copies_desc" ? "sort-desc" : "sort-indicator")"
+                                       asp-acti on="Index"
+                                       asp-area="Admin"
+                                       asp-route-sortOrder="@(ViewData["CurrentSort"] == "copies" ? "copies_desc" : "copies")"
+                                       asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                                       asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                                       asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                                        @Html.DisplayNameFor(model => model.First().Copies)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort-header @(ViewData["CurrentSort"] == "author" ? "sort-asc" : ViewData["CurrentSort"] == "author_desc" ? "sort-desc" : "sort-indicator")"
+                                       asp-action="Index"
+                                       asp-area="Admin"
+                                       asp-route-sortOrder="@(ViewData["CurrentSort"] == "author" ? "author_desc" : "author")"
+                                       asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                                       asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                                       asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                                        @Html.DisplayNameFor(model => model.First().Author)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort-header @(ViewData["CurrentSort"] == "category" ? "sort-asc" : ViewData["CurrentSort"] == "category_desc" ? "sort-desc" : "sort-indicator")"
+                                       asp-action="Index"
+                                       asp-area="Admin"
+                                       asp-route-sortOrder="@(ViewData["CurrentSort"] == "category" ? "category_desc" : "category")"
+                                       asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                                       asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                                       asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                                        @Html.DisplayNameFor(model => model.First().Category)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort-header @(ViewData["CurrentSort"] == "active" ? "sort-asc" : ViewData["CurrentSort"] == "active_desc" ? "sort-desc" : "sort-indicator")"
+                                       asp-action="Index"
+                                       asp-area="Admin"
+                                       asp-route-sortOrder="@(ViewData["CurrentSort"] == "active" ? "active_desc" : "active")"
+                                       asp-route-searchTitle="@ViewData["CurrentTitleFilter"]"
+                                       asp-route-authorId="@ViewData["CurrentAuthorFilter"]"
+                                       asp-route-categoryId="@ViewData["CurrentCategoryFilter"]">
+                                        @Html.DisplayNameFor(model => model.First().Active)
+                                    </a>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Copies)
+                                    </td>
+                                    <td>
+                                        @if (item.Author != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Author.Name) @Html.DisplayFor(modelItem => item.Author.LastName)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Category != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Category.Name)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Active)
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary" asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                        <a class="btn btn-info" asp-area="Admin" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                        <a class="btn btn-danger" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <nav aria-label="Page navigation">
