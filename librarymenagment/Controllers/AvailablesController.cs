@@ -9,7 +9,7 @@ using librarymenagment.Data;
 using librarymenagment.Models;
 using librarymenagment.Helpers;
 
-namespace librarymenagment
+namespace librarymenagment.Controllers
 {
     public class AvailablesController : Controller
     {
