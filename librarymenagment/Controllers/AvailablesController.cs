@@ -9,7 +9,7 @@ using librarymenagment.Data;
 using librarymenagment.Models;
 using librarymenagment.Helpers;
 
-namespace librarymenagment.Controllers
+namespace librarymenagment
 {
     public class AvailablesController : Controller
     {
@@ -59,7 +59,7 @@ namespace librarymenagment.Controllers
                 "description" => available.OrderBy(a => a.Status),
                 "description_desc" => available.OrderByDescending(a => a.Status),
 
-                _ => available.OrderBy(a => a Status)
+                _ => available.OrderBy(a => a .Status)
             };
             
 

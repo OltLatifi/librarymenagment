@@ -90,7 +90,7 @@ namespace librarymenagment.Controllers
         public IActionResult Create()
         {
             ViewData["BookId"] = new SelectList(_context.Book, "Id", "Description");
-            return View(Coments);
+            return View();
         }
 
         // POST: Coments/Create
