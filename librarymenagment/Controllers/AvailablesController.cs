@@ -19,8 +19,6 @@ namespace librarymenagment
         {
             _context = context;
         }
-
-        // GET: Availables
         public async Task<IActionResult> Index(string sortOrder, string searchName, string statusFilter, DateTime? orderDateFilter, int? pageNumber)
         {
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -49,7 +47,7 @@ namespace librarymenagment
                 availables = availables.Where(a => a.DataPorosise.Date == orderDateFilter.Value.Date);
             }
 
-            
+            // Apply sorting
             availables = sortOrder switch
             {
                 "name_desc" => availables.OrderByDescending(a => a.Name),
@@ -60,13 +58,12 @@ namespace librarymenagment
                 _ => availables.OrderBy(a => a.Name),
             };
 
-            
+            // Pass data for dropdowns or additional UI options
             var statuses = availables.Select(a => a.Status).Distinct().ToList();
             ViewBag.Statuses = statuses;
 
             return View(await PaginatedList<Available>.CreateAsync(availables, pageNumber ?? 1));
         }
-
 
         // GET: Availables/Details/5
         public async Task<IActionResult> Details(int? id)
