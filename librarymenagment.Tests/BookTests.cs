@@ -1,5 +1,10 @@
 using Xunit;
 using System;
+using librarymenagment.Models;
+using librarymenagment.Controllers;
+using librarymenagment.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace librarymenagment.Tests
 {
@@ -12,17 +17,17 @@ namespace librarymenagment.Tests
             var book = new Book
             {
                 Title = "Test Book",
-                Author = "Test Author",
-                PublicationYear = 2024,
-                Available = true,
+                AuthorId = 1,
+                CategoryId = 1,
+                Active = true,
             };
 
             // Assert
             Assert.NotNull(book);
             Assert.Equal("Test Book", book.Title);
-            Assert.Equal("Test Author", book.Author);
-            Assert.Equal(2024, book.PublicationYear);
-            Assert.True(book.Available);
+            Assert.Equal(1, book.AuthorId);
+            Assert.Equal(1, book.CategoryId);
+            Assert.True(book.Active);
         }
 
         [Theory]
