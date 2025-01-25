@@ -21,57 +21,50 @@ namespace librarymenagment
         }
 
         // GET: Availables
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchName, string statusFilter, DateTime? orderDateFilter, int? pageNumber)
         {
-            return View(await _context.Available.ToListAsync());
-        }
-        public async Task<IActionResult> Index(string sortOrder, string searchName, string authorId,string status, string categoryId, int? pageNumber)
-        {
-            ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
             ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
-            ViewData["CopiesSortParam"] = sortOrder == "copies" ? "copies_desc" : "copies";
-            ViewData["AuthorSortParam"] = sortOrder == "author" ? "author_desc" : "author";
-            ViewData["CategorySortParam"] = sortOrder == "category" ? "category_desc" : "category";
-            ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
 
-            ViewData["CurrentTitleFilter"] = searchName;
-            ViewData["CurrentStatusFilter"] = status;
-            ViewData["CurrentCategoryFilter"] = categoryId;
+            ViewData["CurrentNameFilter"] = searchName;
+            ViewData["CurrentStatusFilter"] = statusFilter;
+            ViewData["CurrentOrderDateFilter"] = orderDateFilter;
 
-            var available = from b in _context.Available
-                        .Include(b => b.Name)
-                      
-                        select b;
+            var availables = from a in _context.Available
+                             .Include(a => a.PublishedBooks)
+                             select a;
 
+            // Apply search filters
             if (!String.IsNullOrEmpty(searchName))
             {
-                available = available.Where(a => a.Name.Contains(searchName));
+                availables = availables.Where(a => a.Name.Contains(searchName));
             }
-            if (!String.IsNullOrEmpty(status))
+            if (!String.IsNullOrEmpty(statusFilter))
             {
-                available = available.Where(a => a.Status.Contains(status));
+                availables = availables.Where(a => a.Status.Equals(statusFilter, StringComparison.OrdinalIgnoreCase));
+            }
+            if (orderDateFilter.HasValue)
+            {
+                availables = availables.Where(a => a.DataPorosise.Date == orderDateFilter.Value.Date);
             }
 
-
-            available = sortOrder switch
-            {
-                "name_desc" => available.OrderByDescending(a => a.Name),
-                "description" => available.OrderBy(a => a.Status),
-                "description_desc" => available.OrderByDescending(a => a.Status),
-
-                _ => available.OrderBy(a => a .Status)
-            };
             
+            availables = sortOrder switch
+            {
+                "name_desc" => availables.OrderByDescending(a => a.Name),
+                "date" => availables.OrderBy(a => a.DataPorosise),
+                "date_desc" => availables.OrderByDescending(a => a.DataPorosise),
+                "status" => availables.OrderBy(a => a.Status),
+                "status_desc" => availables.OrderByDescending(a => a.Status),
+                _ => availables.OrderBy(a => a.Name),
+            };
 
-            var userBookPermissions = await _context.UserBookPermission.ToListAsync();
+            
+            var statuses = availables.Select(a => a.Status).Distinct().ToList();
+            ViewBag.Statuses = statuses;
 
-            var userBookPermissionDict = userBookPermissions
-                .GroupBy(ubp => ubp.BookId)
-                .ToDictionary(g => g.Key, g => g.Select(ubp => ubp.UserId).ToList());
-
-            ViewBag.UserBookPermissions = userBookPermissionDict;
-
-            return View(await PaginatedList<Available>.CreateAsync(available, pageNumber ?? 1));
+            return View(await PaginatedList<Available>.CreateAsync(availables, pageNumber ?? 1));
         }
 
 
