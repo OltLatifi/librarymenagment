@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment
 {
@@ -24,6 +25,55 @@ namespace librarymenagment
         {
             return View(await _context.Available.ToListAsync());
         }
+        public async Task<IActionResult> Index(string sortOrder, string searchName, string authorId,string status, string categoryId, int? pageNumber)
+        {
+            ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["CopiesSortParam"] = sortOrder == "copies" ? "copies_desc" : "copies";
+            ViewData["AuthorSortParam"] = sortOrder == "author" ? "author_desc" : "author";
+            ViewData["CategorySortParam"] = sortOrder == "category" ? "category_desc" : "category";
+            ViewData["ActiveSortParam"] = sortOrder == "active" ? "active_desc" : "active";
+
+            ViewData["CurrentTitleFilter"] = searchName;
+            ViewData["CurrentStatusFilter"] = status;
+            ViewData["CurrentCategoryFilter"] = categoryId;
+
+            var available = from b in _context.Available
+                        .Include(b => b.Name)
+                      
+                        select b;
+
+            if (!String.IsNullOrEmpty(searchName))
+            {
+                available = available.Where(a => a.Name.Contains(searchName));
+            }
+            if (!String.IsNullOrEmpty(status))
+            {
+                available = available.Where(a => a.Status.Contains(status));
+            }
+
+
+            available = sortOrder switch
+            {
+                "name_desc" => available.OrderByDescending(a => a.Name),
+                "description" => available.OrderBy(a => a.Status),
+                "description_desc" => available.OrderByDescending(a => a.Status),
+
+                _ => available.OrderBy(a => a Status)
+            };
+            
+
+            var userBookPermissions = await _context.UserBookPermission.ToListAsync();
+
+            var userBookPermissionDict = userBookPermissions
+                .GroupBy(ubp => ubp.BookId)
+                .ToDictionary(g => g.Key, g => g.Select(ubp => ubp.UserId).ToList());
+
+            ViewBag.UserBookPermissions = userBookPermissionDict;
+
+            return View(await PaginatedList<Available>.CreateAsync(available, pageNumber ?? 1));
+        }
+
 
         // GET: Availables/Details/5
         public async Task<IActionResult> Details(int? id)

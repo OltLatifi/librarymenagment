@@ -13,7 +13,7 @@ namespace librarymenagment.Models
         public string Name { get; set; }
         public DateTime DataPorosise { get; set; }
 
-        public string Statusi {  get; set; }
+        public string Status {  get; set; }
 
         
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -19,11 +20,49 @@ namespace librarymenagment.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> PublishingHouseIndex(string sortOrder, string searchName, string searchAddress, int? pageNumber)
+        {
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParam"] = sortOrder == "foundedDate" ? "foundedDate_desc" : "foundedDate";
+            ViewData["AddressSortParam"] = sortOrder == "address" ? "address_desc" : "address";
+
+            ViewData["CurrentNameFilter"] = searchName;
+            ViewData["CurrentAddressFilter"] = searchAddress;
+
+            var publishingHouses = from ph in _context.PublishingHouses
+                                   .Include(ph => ph.Authors)
+                                   .Include(ph => ph.PublishedBooks)
+                                   select ph;
+
+            if (!String.IsNullOrEmpty(searchName))
+            {
+                publishingHouses = publishingHouses.Where(ph => ph.Name.Contains(searchName));
+            }
+            if (!String.IsNullOrEmpty(searchAddress))
+            {
+                publishingHouses = publishingHouses.Where(ph => ph.Address.Contains(searchAddress));
+            }
+
+            publishingHouses = sortOrder switch
+            {
+                "name_desc" => publishingHouses.OrderByDescending(ph => ph.Name),
+                "foundedDate" => publishingHouses.OrderBy(ph => ph.FoundedDate),
+                "foundedDate_desc" => publishingHouses.OrderByDescending(ph => ph.FoundedDate),
+                "address" => publishingHouses.OrderBy(ph => ph.Address),
+                "address_desc" => publishingHouses.OrderByDescending(ph => ph.Address),
+                _ => publishingHouses.OrderBy(ph => ph.Name),
+            };
+
+            return View(await PaginatedList<PublishingHouse>.CreateAsync(publishingHouses, pageNumber ?? 1));
+        }
+
+
         // GET: PublishingHouses
         public async Task<IActionResult> Index()
         {
             return View(await _context.PublishingHouses.Where(p => p.Active == true).ToListAsync());
         }
+        
 
         // GET: PublishingHouses/Details/5
         public async Task<IActionResult> Details(int? id)

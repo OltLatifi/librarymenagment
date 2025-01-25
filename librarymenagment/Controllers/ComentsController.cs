@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -17,6 +18,46 @@ namespace librarymenagment.Controllers
         public ComentsController(ApplicationDbContext context)
         {
             _context = context;
+        }
+        public async Task<IActionResult> CommentsIndex(string sortOrder, string searchDescription, string userId, int? bookId, int? pageNumber)
+        {
+            ViewData["DescriptionSortParam"] = String.IsNullOrEmpty(sortOrder) ? "description_desc" : "";
+            ViewData["UserSortParam"] = sortOrder == "user" ? "user_desc" : "user";
+            ViewData["BookSortParam"] = sortOrder == "book" ? "book_desc" : "book";
+
+            ViewData["CurrentDescriptionFilter"] = searchDescription;
+            ViewData["CurrentUserFilter"] = userId;
+            ViewData["CurrentBookFilter"] = bookId;
+
+            var comments = from c in _context.Coments
+                           .Include(c => c.Book)
+                           .Include(c => c.User)
+                           select c;
+
+            if (!String.IsNullOrEmpty(searchDescription))
+            {
+                comments = comments.Where(c => c.Description.Contains(searchDescription));
+            }
+            if (!String.IsNullOrEmpty(userId))
+            {
+                comments = comments.Where(c => c.UserId == userId);
+            }
+            if (bookId.HasValue)
+            {
+                comments = comments.Where(c => c.BookId == bookId.Value);
+            }
+
+            comments = sortOrder switch
+            {
+                "description_desc" => comments.OrderByDescending(c => c.Description),
+                "user" => comments.OrderBy(c => c.User.UserName),
+                "user_desc" => comments.OrderByDescending(c => c.User.UserName),
+                "book" => comments.OrderBy(c => c.Book.Title),
+                "book_desc" => comments.OrderByDescending(c => c.Book.Title),
+                _ => comments.OrderBy(c => c.Description),
+            };
+
+            return View(await PaginatedList<Coments>.CreateAsync(comments, pageNumber ?? 1));
         }
 
         // GET: Coments
@@ -49,7 +90,7 @@ namespace librarymenagment.Controllers
         public IActionResult Create()
         {
             ViewData["BookId"] = new SelectList(_context.Book, "Id", "Description");
-            return View();
+            return View(Coments);
         }
 
         // POST: Coments/Create
