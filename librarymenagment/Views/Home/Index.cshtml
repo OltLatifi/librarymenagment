@@ -2,7 +2,40 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<header class="hero" style="margin-top: -40px;">
+    <div class="hero-content">
+        <h1>Manage Your Library<br>The Smart Way</h1>
+        <p>A simple and efficient solution for libraries of all sizes</p>
+        <a asp-area="Identity" asp-page="/Account/Login" class="cta-button">Try Now</a>
+    </div>
+</header>
+
+<main>
+    <section id="features" class="features">
+        <h2>Core Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Book Management</h3>
+                <p>Easily add, update, and track your entire book collection</p>
+            </div>
+            <div class="feature-card">
+                <h3>Member System</h3>
+                <p>Manage library members and their borrowing history</p>
+            </div>
+            <div class="feature-card">
+                <h3>Quick Search</h3>
+                <p>Find books and members in seconds with advanced search</p>
+            </div>
+            <div class="feature-card">
+                <h3>Security</h3>
+                <p>Role based permissions on your library</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About the System</h2>
+        <p>Our library management system is designed to be simple yet powerful. It helps librarians focus on what matters most - serving their readers.</p>
+    </section>
+</main>
