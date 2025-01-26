@@ -259,7 +259,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasIndex("PublishingHouseId");
 
-                    b.ToTable("Author");
+                    b.ToTable("Author", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.Available", b =>
@@ -296,7 +296,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Available");
+                    b.ToTable("Available", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.Book", b =>
@@ -354,7 +354,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasIndex("PublishingHouseId");
 
-                    b.ToTable("Book");
+                    b.ToTable("Book", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.Category", b =>
@@ -380,7 +380,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.Coments", b =>
@@ -416,7 +416,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Coments");
+                    b.ToTable("Coments", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.Member", b =>
@@ -474,7 +474,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Member");
+                    b.ToTable("Member", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.PublishingHouse", b =>
@@ -507,7 +507,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PublishingHouses");
+                    b.ToTable("PublishingHouses", (string)null);
                 });
 
             modelBuilder.Entity("librarymenagment.Models.UserBookPermission", b =>
@@ -539,7 +539,7 @@ namespace librarymenagment.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserBookPermission");
+                    b.ToTable("UserBookPermission", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

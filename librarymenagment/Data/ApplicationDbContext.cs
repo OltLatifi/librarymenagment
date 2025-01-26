@@ -71,5 +71,6 @@ namespace librarymenagment.Data
         public DbSet<librarymenagment.Models.Available> Available { get; set; } = default!;
         public DbSet<UserBookPermission> UserBookPermission { get; set; }
         public DbSet<librarymenagment.Models.Member> Member { get; set; } = default!;
+       
     }
 }
