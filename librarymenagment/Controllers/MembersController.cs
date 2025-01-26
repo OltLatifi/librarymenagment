@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -17,6 +18,64 @@ namespace librarymenagment.Controllers
         public MembersController(ApplicationDbContext context)
         {
             _context = context;
+        }
+        public async Task<IActionResult> Index(string sortOrder, string searchFirstName, string searchLastName, string membershipType, bool? isActive, int? pageNumber)
+        {
+            
+            ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstName_desc" : "";
+            ViewData["LastNameSortParam"] = sortOrder == "lastName" ? "lastName_desc" : "lastName";
+            ViewData["DateOfBirthSortParam"] = sortOrder == "dob" ? "dob_desc" : "dob";
+            ViewData["MembershipTypeSortParam"] = sortOrder == "membershipType" ? "membershipType_desc" : "membershipType";
+            ViewData["IsActiveSortParam"] = sortOrder == "isActive" ? "isActive_desc" : "isActive";
+
+           
+            ViewData["CurrentFirstNameFilter"] = searchFirstName;
+            ViewData["CurrentLastNameFilter"] = searchLastName;
+            ViewData["CurrentMembershipTypeFilter"] = membershipType;
+            ViewData["CurrentActiveFilter"] = isActive;
+
+            var members = from m in _context.Member
+                          select m;
+
+           
+            if (!String.IsNullOrEmpty(searchFirstName))
+            {
+                members = members.Where(m => m.FirstName.Contains(searchFirstName));
+            }
+
+            if (!String.IsNullOrEmpty(searchLastName))
+            {
+                members = members.Where(m => m.LastName.Contains(searchLastName));
+            }
+
+            if (!String.IsNullOrEmpty(membershipType))
+            {
+                members = members.Where(m => m.MembershipType.Contains(membershipType));
+            }
+
+            
+            if (isActive.HasValue)
+            {
+                members = members.Where(m => m.IsActive == isActive.Value);
+            }
+
+            
+            members = sortOrder switch
+            {
+                "firstName_desc" => members.OrderByDescending(m => m.FirstName),
+                "lastName" => members.OrderBy(m => m.LastName),
+                "lastName_desc" => members.OrderByDescending(m => m.LastName),
+                "dob" => members.OrderBy(m => m.DateOfBirth),
+                "dob_desc" => members.OrderByDescending(m => m.DateOfBirth),
+                "membershipType" => members.OrderBy(m => m.MembershipType),
+                "membershipType_desc" => members.OrderByDescending(m => m.MembershipType),
+                "isActive" => members.OrderBy(m => m.IsActive),
+                "isActive_desc" => members.OrderByDescending(m => m.IsActive),
+                _ => members.OrderBy(m => m.FirstName),
+            };
+
+            
+            return View(await PaginatedList<Member>.CreateAsync(members, pageNumber ?? 1));
         }
 
         // GET: Members
