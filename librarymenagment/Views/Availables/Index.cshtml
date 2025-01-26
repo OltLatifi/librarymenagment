@@ -1,71 +1,147 @@
 ﻿@model IEnumerable<librarymenagment.Models.Available>
+@using System.Security.Claims
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Availables Management";
 }
 
-<h1>Index</h1>
+<style>
+    /* Stilizimi i njëjtë për tabelën dhe elementët e dizajnit */
+    .sort-header {
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+        color: #212529;
+    }
 
-<p>
-    <a asp-area="" asp-action ="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataPorosise)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Active)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.DataPorosise)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td>
-                <a asp-area="" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                <a asp-area="" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                <a asp-area="" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        .sort-header:hover {
+            color: #007bff;
+        }
+
+    .sort-indicator::after {
+        content: '↕';
+        position: relative;
+        left: 5px;
+        color: #999;
+    }
+
+    .sort-asc::after {
+        content: '↑';
+        position: relative;
+        left: 5px;
+        color: #007bff;
+    }
+
+    .sort-desc::after {
+        content: '↓';
+        position: relative;
+        left: 5px;
+        color: #007bff;
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        color: #495057;
+        font-weight: bold;
+    }
+
+    .btn-sm {
+        font-size: 13px;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .table-responsive {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Availables Management</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Availables</li>
+    </ol>
+
+    <!-- Availables Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-clipboard-check me-1"></i> Availables List
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>DataPorosise Date</th>
+                            <th>Status</th>
+                            <th>Address</th>
+                            <th>Published Books</th>
+                            <th>Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataPorosise)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Address)
+                                </td>
+                                
+                                <td>
+
+                                    <a asp-area="" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-area="" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    <a asp-area="" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </td>
+
+
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create New Available -->
+    <div class="d-flex justify-content-between mt-3">
+        <a asp-action="Create" class="btn btn-primary">Create New Available</a>
+    </div>
+</div>
