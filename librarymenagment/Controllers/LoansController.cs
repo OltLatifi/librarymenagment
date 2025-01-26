@@ -36,7 +36,7 @@ namespace librarymenagment.Controllers
 
             
             var loans = from l in _context.Loans
-                       
+                      
                         select l;
 
             

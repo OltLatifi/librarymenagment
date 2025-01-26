@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -17,6 +18,75 @@ namespace librarymenagment.Controllers
         public EventsController(ApplicationDbContext context)
         {
             _context = context;
+        }
+        public async Task<IActionResult> Index(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
+        {
+           
+            ViewData["MemberSortParam"] = String.IsNullOrEmpty(sortOrder) ? "member_desc" : "";
+            ViewData["BookSortParam"] = sortOrder == "book" ? "book_desc" : "book";
+            ViewData["LoanDateSortParam"] = sortOrder == "loanDate" ? "loanDate_desc" : "loanDate";
+            ViewData["ReturnDateSortParam"] = sortOrder == "returnDate" ? "returnDate_desc" : "returnDate";
+
+            
+            ViewData["CurrentMemberFilter"] = searchMemberId;
+            ViewData["CurrentBookFilter"] = searchBookId;
+            ViewData["CurrentStartDateFilter"] = startDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentEndDateFilter"] = endDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentIsReturnedFilter"] = isReturned;
+
+            
+            var events = from l in _context.Loans
+                         .Include(l => l.Member)
+                         .Include(l => l.Book)
+                         select l;
+
+            
+            if (searchMemberId.HasValue)
+            {
+                events = events.Where(l => l.MemberId == searchMemberId);
+            }
+
+            if (searchBookId.HasValue)
+            {
+                events = events.Where(l => l.BookId == searchBookId);
+            }
+
+           
+            if (startDate.HasValue)
+            {
+                events = events.Where(l => l.LoanDate >= startDate);
+            }
+            if (endDate.HasValue)
+            {
+                events = events.Where(l => l.LoanDate <= endDate);
+            }
+
+            if (isReturned.HasValue)
+            {
+                events = events.Where(l => l.ReturnDate.HasValue == isReturned.Value);
+            }
+
+           
+            events = sortOrder switch
+            {
+                "member_desc" => events.OrderByDescending(l => l.MemberId),
+                "book" => events.OrderBy(l => l.BookId),
+                "book_desc" => events.OrderByDescending(l => l.BookId),
+                "loanDate" => events.OrderBy(l => l.LoanDate),
+                "loanDate_desc" => events.OrderByDescending(l => l.LoanDate),
+                "returnDate" => events.OrderBy(l => l.ReturnDate),
+                "returnDate_desc" => events.OrderByDescending(l => l.ReturnDate),
+                _ => events.OrderBy(l => l.LoanDate),
+            };
+
+            
+            var members = _context.Member.ToList();
+            ViewBag.Member = members;
+            var books = _context.Book.ToList();
+            ViewBag.Book = books;
+
+            
+            return View(await PaginatedList<Loans>.CreateAsync(events, pageNumber ?? 1));
         }
 
         // GET: Events
