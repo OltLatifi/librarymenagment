@@ -57,6 +57,25 @@
                                asp-controller="Availables"
                                asp-action="Index">Availables</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Members" ? "active" : "")"
+                               asp-area=""
+                               asp-controller="Members"
+                               asp-action="Index">Members</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Events" ? "active" : "")"
+                               asp-area=""
+                               asp-controller="Events"
+                               asp-action="Index">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Loans" ? "active" : "")"
+                               asp-area=""
+                               asp-controller="Loans"
+                               asp-action="Index">Loans</a>
+                        </li>
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
