@@ -8,24 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
 
-namespace librarymenagment.Controllers
+namespace librarymenagment
 {
-    public class EventsController : Controller
+    public class LoansController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public EventsController(ApplicationDbContext context)
+        public LoansController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Events
+        // GET: Loans
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Events.ToListAsync());
+            return View(await _context.Loans.ToListAsync());
         }
 
-        // GET: Events/Details/5
+        // GET: Loans/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace librarymenagment.Controllers
                 return NotFound();
             }
 
-            var events = await _context.Events
+            var loans = await _context.Loans
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (events == null)
+            if (loans == null)
             {
                 return NotFound();
             }
 
-            return View(events);
+            return View(loans);
         }
 
-        // GET: Events/Create
+        // GET: Loans/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Events/Create
+        // POST: Loans/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,StartDate,EndDate,CreatedAt,UpdatedAt,Active")] Events events)
+        public async Task<IActionResult> Create([Bind("Id,MemberId,BookId,LoanDate,ReturnDate,CreatedAt,UpdatedAt,Active")] Loans loans)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(events);
+                _context.Add(loans);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(events);
+            return View(loans);
         }
 
-        // GET: Events/Edit/5
+        // GET: Loans/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace librarymenagment.Controllers
                 return NotFound();
             }
 
-            var events = await _context.Events.FindAsync(id);
-            if (events == null)
+            var loans = await _context.Loans.FindAsync(id);
+            if (loans == null)
             {
                 return NotFound();
             }
-            return View(events);
+            return View(loans);
         }
 
-        // POST: Events/Edit/5
+        // POST: Loans/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,StartDate,EndDate,CreatedAt,UpdatedAt,Active")] Events events)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,BookId,LoanDate,ReturnDate,CreatedAt,UpdatedAt,Active")] Loans loans)
         {
-            if (id != events.Id)
+            if (id != loans.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace librarymenagment.Controllers
             {
                 try
                 {
-                    _context.Update(events);
+                    _context.Update(loans);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventsExists(events.Id))
+                    if (!LoansExists(loans.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace librarymenagment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(events);
+            return View(loans);
         }
 
-        // GET: Events/Delete/5
+        // GET: Loans/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,34 @@ namespace librarymenagment.Controllers
                 return NotFound();
             }
 
-            var events = await _context.Events
+            var loans = await _context.Loans
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (events == null)
+            if (loans == null)
             {
                 return NotFound();
             }
 
-            return View(events);
+            return View(loans);
         }
 
-        // POST: Events/Delete/5
+        // POST: Loans/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var events = await _context.Events.FindAsync(id);
-            if (events != null)
+            var loans = await _context.Loans.FindAsync(id);
+            if (loans != null)
             {
-                _context.Events.Remove(events);
+                _context.Loans.Remove(loans);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EventsExists(int id)
+        private bool LoansExists(int id)
         {
-            return _context.Events.Any(e => e.Id == id);
+            return _context.Loans.Any(e => e.Id == id);
         }
     }
 }
