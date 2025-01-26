@@ -36,8 +36,8 @@ namespace librarymenagment.Controllers
 
             
             var events = from l in _context.Loans
-                         .Include(l => l.Member)
-                         .Include(l => l.Book)
+                         .Include(l => l.MemberId)
+                         .Include(l => l.BookId)
                          select l;
 
             

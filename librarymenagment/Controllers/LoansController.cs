@@ -9,7 +9,7 @@ using librarymenagment.Data;
 using librarymenagment.Models;
 using librarymenagment.Helpers;
 
-namespace librarymenagment.Controllers
+namespace librarymenagment
 {
     public class LoansController : Controller
     {
@@ -21,36 +21,38 @@ namespace librarymenagment.Controllers
         }
         public async Task<IActionResult> Index(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
         {
-            
+            // Parametra për filtrimin dhe renditjen
             ViewData["MemberSortParam"] = String.IsNullOrEmpty(sortOrder) ? "member_desc" : "";
             ViewData["BookSortParam"] = sortOrder == "book" ? "book_desc" : "book";
             ViewData["LoanDateSortParam"] = sortOrder == "loanDate" ? "loanDate_desc" : "loanDate";
             ViewData["ReturnDateSortParam"] = sortOrder == "returnDate" ? "returnDate_desc" : "returnDate";
 
-           
+            // Parametra për filtrat aktualë
             ViewData["CurrentMemberFilter"] = searchMemberId;
             ViewData["CurrentBookFilter"] = searchBookId;
             ViewData["CurrentStartDateFilter"] = startDate?.ToString("yyyy-MM-dd");
             ViewData["CurrentEndDateFilter"] = endDate?.ToString("yyyy-MM-dd");
             ViewData["CurrentIsReturnedFilter"] = isReturned;
 
-            
+            // Fillimi i lista e loans nga baza e të dhënave dhe përdorimi i Include për Member dhe Book
             var loans = from l in _context.Loans
-                      
+                        .Include(l => l.MemberId)  // Këtu lidhim Member me Loans
+                        .Include(l => l.BookId)    // Këtu lidhim Book me Loans
                         select l;
 
-            
+            // Filtrimi për MemberId
             if (searchMemberId.HasValue)
             {
                 loans = loans.Where(l => l.MemberId == searchMemberId);
             }
 
+            // Filtrimi për BookId
             if (searchBookId.HasValue)
             {
                 loans = loans.Where(l => l.BookId == searchBookId);
             }
 
-            
+            // Filtrimi për LoanDate
             if (startDate.HasValue)
             {
                 loans = loans.Where(l => l.LoanDate >= startDate);
@@ -60,13 +62,13 @@ namespace librarymenagment.Controllers
                 loans = loans.Where(l => l.LoanDate <= endDate);
             }
 
-            
+            // Filtrimi për ReturnDate
             if (isReturned.HasValue)
             {
                 loans = loans.Where(l => l.ReturnDate.HasValue == isReturned.Value);
             }
 
-            
+            // Sortimi sipas kërkesës
             loans = sortOrder switch
             {
                 "member_desc" => loans.OrderByDescending(l => l.MemberId),
@@ -79,13 +81,13 @@ namespace librarymenagment.Controllers
                 _ => loans.OrderBy(l => l.LoanDate),
             };
 
-            
+            // Marrja e të dhënave për anëtarët dhe librat për të shfaqur në ViewBag
             var members = _context.Member.ToList();
             ViewBag.Member = members;
             var books = _context.Book.ToList();
             ViewBag.Book = books;
 
-            
+            // Pagina dhe kthimi i të dhënave të filtruar dhe të renditura
             return View(await PaginatedList<Loans>.CreateAsync(loans, pageNumber ?? 1));
         }
 
