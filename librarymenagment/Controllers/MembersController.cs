@@ -19,7 +19,7 @@ namespace librarymenagment.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string sortOrder, string searchFirstName, string searchLastName, string membershipType, bool? isActive, int? pageNumber)
+        public async Task<IActionResult> MembersIndex(string sortOrder, string searchFirstName, string searchLastName, string membershipType, bool? isActive, int? pageNumber)
         {
             
             ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstName_desc" : "";

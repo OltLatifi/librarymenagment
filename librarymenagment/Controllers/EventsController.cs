@@ -19,7 +19,7 @@ namespace librarymenagment.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
+        public async Task<IActionResult> EventsIndex(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
         {
            
             ViewData["MemberSortParam"] = String.IsNullOrEmpty(sortOrder) ? "member_desc" : "";
@@ -36,8 +36,7 @@ namespace librarymenagment.Controllers
 
             
             var events = from l in _context.Loans
-                         .Include(l => l.Member)
-                         .Include(l => l.Book)
+                         
                          select l;
 
             

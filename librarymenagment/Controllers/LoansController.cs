@@ -19,7 +19,7 @@ namespace librarymenagment
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
+        public async Task<IActionResult> LoansIndex(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
         {
             // Parametra për filtrimin dhe renditjen
             ViewData["MemberSortParam"] = String.IsNullOrEmpty(sortOrder) ? "member_desc" : "";
@@ -36,8 +36,7 @@ namespace librarymenagment
 
             // Fillimi i lista e loans nga baza e të dhënave dhe përdorimi i Include për Member dhe Book
             var loans = from l in _context.Loans
-                        .Include(l => l.Member)  // Këtu lidhim Member me Loans
-                        .Include(l => l.Book)    // Këtu lidhim Book me Loans
+                       
                         select l;
 
             // Filtrimi për MemberId
