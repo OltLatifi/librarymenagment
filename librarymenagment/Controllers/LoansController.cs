@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using librarymenagment.Data;
 using librarymenagment.Models;
+using librarymenagment.Helpers;
 
 namespace librarymenagment.Controllers
 {
@@ -17,6 +18,75 @@ namespace librarymenagment.Controllers
         public LoansController(ApplicationDbContext context)
         {
             _context = context;
+        }
+        public async Task<IActionResult> Index(string sortOrder, int? searchMemberId, int? searchBookId, DateTime? startDate, DateTime? endDate, bool? isReturned, int? pageNumber)
+        {
+            
+            ViewData["MemberSortParam"] = String.IsNullOrEmpty(sortOrder) ? "member_desc" : "";
+            ViewData["BookSortParam"] = sortOrder == "book" ? "book_desc" : "book";
+            ViewData["LoanDateSortParam"] = sortOrder == "loanDate" ? "loanDate_desc" : "loanDate";
+            ViewData["ReturnDateSortParam"] = sortOrder == "returnDate" ? "returnDate_desc" : "returnDate";
+
+           
+            ViewData["CurrentMemberFilter"] = searchMemberId;
+            ViewData["CurrentBookFilter"] = searchBookId;
+            ViewData["CurrentStartDateFilter"] = startDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentEndDateFilter"] = endDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentIsReturnedFilter"] = isReturned;
+
+            
+            var loans = from l in _context.Loans
+                       
+                        select l;
+
+            
+            if (searchMemberId.HasValue)
+            {
+                loans = loans.Where(l => l.MemberId == searchMemberId);
+            }
+
+            if (searchBookId.HasValue)
+            {
+                loans = loans.Where(l => l.BookId == searchBookId);
+            }
+
+            
+            if (startDate.HasValue)
+            {
+                loans = loans.Where(l => l.LoanDate >= startDate);
+            }
+            if (endDate.HasValue)
+            {
+                loans = loans.Where(l => l.LoanDate <= endDate);
+            }
+
+            
+            if (isReturned.HasValue)
+            {
+                loans = loans.Where(l => l.ReturnDate.HasValue == isReturned.Value);
+            }
+
+            
+            loans = sortOrder switch
+            {
+                "member_desc" => loans.OrderByDescending(l => l.MemberId),
+                "book" => loans.OrderBy(l => l.BookId),
+                "book_desc" => loans.OrderByDescending(l => l.BookId),
+                "loanDate" => loans.OrderBy(l => l.LoanDate),
+                "loanDate_desc" => loans.OrderByDescending(l => l.LoanDate),
+                "returnDate" => loans.OrderBy(l => l.ReturnDate),
+                "returnDate_desc" => loans.OrderByDescending(l => l.ReturnDate),
+                _ => loans.OrderBy(l => l.LoanDate),
+            };
+
+            
+            var members = _context.Member.ToList();
+            ViewBag.Member = members;
+            var books = _context.Book.ToList();
+            ViewBag.Book = books;
+
+            
+            return View(await PaginatedList<Loans>.CreateAsync(loans, pageNumber ?? 1));
         }
 
         // GET: Loans
