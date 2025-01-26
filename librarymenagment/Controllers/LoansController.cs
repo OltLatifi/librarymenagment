@@ -36,8 +36,8 @@ namespace librarymenagment
 
             // Fillimi i lista e loans nga baza e të dhënave dhe përdorimi i Include për Member dhe Book
             var loans = from l in _context.Loans
-                        .Include(l => l.MemberId)  // Këtu lidhim Member me Loans
-                        .Include(l => l.BookId)    // Këtu lidhim Book me Loans
+                        .Include(l => l.Member)  // Këtu lidhim Member me Loans
+                        .Include(l => l.Book)    // Këtu lidhim Book me Loans
                         select l;
 
             // Filtrimi për MemberId
