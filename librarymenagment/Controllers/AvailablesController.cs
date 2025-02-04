@@ -94,7 +94,7 @@ namespace librarymenagment
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DataPorosise,Statusi,Address,CreatedAt,UpdatedAt,Active")] Available available)
+        public async Task<IActionResult> Create([Bind("Id,Name,DataPorosise,Status,Address")] Available available)
         {
             if (ModelState.IsValid)
             {
@@ -126,7 +126,7 @@ namespace librarymenagment
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DataPorosise,Statusi,Address,CreatedAt,UpdatedAt,Active")] Available available)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DataPorosise,Status,Address")] Available available)
         {
             if (id != available.Id)
             {
