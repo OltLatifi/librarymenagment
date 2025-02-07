@@ -96,14 +96,12 @@ namespace librarymenagment
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,DataPorosise,Status,Address")] Available available)
         {
-            if (ModelState.IsValid)
-            {
                 _context.Add(available);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(available);
+                return View(available); 
         }
+            
+        
 
         // GET: Availables/Edit/5
         public async Task<IActionResult> Edit(int? id)
