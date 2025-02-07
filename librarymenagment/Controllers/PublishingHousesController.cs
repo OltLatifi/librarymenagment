@@ -95,14 +95,13 @@ namespace librarymenagment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FoundedDate,Name,Address,CreatedAt,UpdatedAt,Active")] PublishingHouse publishingHouse)
         {
-            if (ModelState.IsValid)
-            {
+            
                 _context.Add(publishingHouse);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             return View(publishingHouse);
         }
+           
+        
 
         // GET: PublishingHouses/Edit/5
         public async Task<IActionResult> Edit(int? id)

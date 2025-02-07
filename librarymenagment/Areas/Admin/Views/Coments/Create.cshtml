@@ -1,0 +1,43 @@
+﻿@model librarymenagment.Models.Coments
+
+@{
+    ViewData["Title"] = "Create Comment";
+}
+
+<h1 class="mt-4">Create Comment</h1>
+<hr />
+<div class="row border mt-4" style="background: white;">
+    <div class="col-12 col-md-6 p-4">
+        <form class="d-flex flex-column gap-2" asp-area="Admin" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BookId" class="control-label">Book</label>
+                <select asp-for="BookId" class="form-control" asp-items="@(ViewData["BookId"] as SelectList)">
+                    <option value="">-- Select a Book --</option>
+                </select>
+                <span asp-validation-for="BookId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-area="Admin" asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-md-6 p-0">
+        <img class="w-100 h-100" src="/images/comment-background.jpg" alt="Background Image" />
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

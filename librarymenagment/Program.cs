@@ -46,7 +46,7 @@ async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager, UserManager<Ide
         }
     }
 
-    var adminEmail = "oltlatifi2003@gmail.com";
+    var adminEmail = "anisaafetahu@gmail.com";
 
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
