@@ -57,7 +57,7 @@ namespace librarymenagment.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FoundedDate,Name,Address,CreatedAt,UpdatedAt,Active")] PublishingHouse publishingHouse)
+        public async Task<IActionResult> Create([Bind("Id,FoundedDate,Name,Address,Active")] PublishingHouse publishingHouse)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace librarymenagment.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FoundedDate,Name,Address,CreatedAt,UpdatedAt,Active")] PublishingHouse publishingHouse)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FoundedDate,Name,Address,Active")] PublishingHouse publishingHouse)
         {
             if (id != publishingHouse.Id)
             {
